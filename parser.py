@@ -39,7 +39,7 @@ class Reaction:
 def parser(file: str):
     """parse things"""
 
-    print("\nlecture du fichier\n")
+    print("\nReading file\n")
     liste=[""]
     with open(file, "r") as dft:
         for line in tqdm(dft): #read file
@@ -47,10 +47,12 @@ def parser(file: str):
                 liste.append(line) #add each reaction line
             else:
                 liste[-1]+=line
-        print("\nnettoyage : \n")
+        print("\nClean up : \n")
         liste = [[[a for a in v.split(" ") if a != ""] for v in i.split("\n") if v != ""] for i in tqdm(liste)][1:] #clean up a little bit
 
-    print("\n\ncréation de la liste d'objets : \n")
+    print("\n\nObject list creation : \n")
+
+
     reactions = []
     for v in tqdm(liste):
         energie = float(v[1][3])
@@ -66,13 +68,3 @@ def parser(file: str):
     print("\n")
     return reactions
 
-reactions = parser("data_for_test")
-"""
-for v in reactions:
-    print("reaction :", v.reaction_equation)
-    print("reaction type :", v.reaction_type)
-    print("vecteur = ", v.vecteur.x, v.vecteur.y, v.vecteur.z)
-    print("energie : ", v.energie)
-    print("nb_sous_reactifs :", v.nb_sous_reactifs)
-    print("\n")
-"""
