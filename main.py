@@ -2,6 +2,7 @@ import parser
 import sys
 from colors import bcolors
 
+
 if __name__ == "__main__":
     try:
         reactions = parser.parser(sys.argv[1])
