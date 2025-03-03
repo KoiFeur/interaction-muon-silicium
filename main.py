@@ -42,3 +42,75 @@ if __name__ == "__main__":
     Exercice 3 : Attention, plus dur ! On veut afficher le vecteur et le nom de chacun des sous produits de chacune des réactions.
 
     """
+    #Exercice 1
+    """
+    for i in range(len(reactions)):
+        print('this reaction has an energy of',reactions[i].energie)
+        print('The type of this reaction is ',reactions[i].reaction_type, '\n')
+    """
+    """
+    Exercice 1 validé par le professeur
+    """
+    """
+    #Exercice 2
+    for i in range(len(reactions)):
+        print('Réaction numéro', i+1)
+        print('Coordonnées x du vecteur:', reactions[i].vecteur.x)
+        print('Coordonnées y du vecteur:', reactions[i].vecteur.y)
+        print('Coordonnées z du vecteur:', reactions[i].vecteur.z, '\n')
+    """
+    """
+    Exercice 2 validé par le professeur
+    """  
+    
+    #Exercice 3
+    for i in range(len(reactions)):
+        print('Réaction numéro', i+1)
+        print('Vecteur de la réaction :')
+        print('   Coordonnées x du vecteur:', reactions[i].vecteur.x)
+        print('   Coordonnées y du vecteur:', reactions[i].vecteur.y)
+        print('   Coordonnées z du vecteur:', reactions[i].vecteur.z)
+        print('Nombre de sous-produits de la réaction :', reactions[i].nb_sous_reactifs)
+        print('\n')
+        
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
