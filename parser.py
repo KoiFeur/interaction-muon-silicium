@@ -60,7 +60,7 @@ class Reaction:
         self.reaction_type: str = self.__get_reaction_type(self.reaction_equation)
         self.nb_sous_reactifs: int = len(self.sous_reactions)
 
-def parser(file: str) -> list[Vecteur]:
+def parser(file: str) -> list:
     """parse things"""
 
     print("\nReading file\n")
