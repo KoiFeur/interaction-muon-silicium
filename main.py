@@ -5,7 +5,7 @@ from colors import bcolors
 
 if __name__ == "__main__":
     try:
-        reactions = parser.parser("data_for_test")
+        reactions = parser.parser("secondaries_500MeV.txt")
     except IndexError:
         print(bcolors.FAIL + "\nPlease put the name of the file here" + bcolors.ENDC)
         print(bcolors.FAIL + "python3 main.py [file to analyse]\n" + bcolors.ENDC)
@@ -42,6 +42,7 @@ if __name__ == "__main__":
     Exercice 3 : Attention, plus dur ! On veut afficher le vecteur et le nom de chacun des sous produits de chacune des réactions.
 
     """
+    print(len(reactions))
     #Exercice 1
     """
     for i in range(len(reactions)):

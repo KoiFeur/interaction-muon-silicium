@@ -7,13 +7,13 @@ class Vecteur:
     Parameters:
 
     x: float
-        x copenent
+        x compenent
 
     y: float
-        y copenent
+        y compenent
 
     z: float
-        z copenent
+        z compenent
     """
     def __init__(self, x, y, z):
         self.x: float = x
@@ -21,6 +21,21 @@ class Vecteur:
         self.z: float = z
 
 class Sub_product:
+    """
+    Sub_product struct
+
+    Parameters: 
+
+    name : str
+        sub product name
+
+    energie : float
+        sub product energy
+
+    vecteur : Vecteur
+        directionnal vector of the particule
+
+    """
     def __init__(self, name: str, energie: float, vec: Vecteur):
         self.name: str = name
         self.energie: float = energie
@@ -40,6 +55,12 @@ class Reaction:
 
     energie: float
         energie of the neutron
+
+    sous_reactions : list[Sub_product]
+        list of the reaction Sub_product
+
+    nb_sous_reactifs : int
+        sub product number 
     """
     
     def __get_reaction_type(self, reaction_equation: list) -> str:
