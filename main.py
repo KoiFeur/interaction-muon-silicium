@@ -62,10 +62,10 @@ if __name__ == "__main__":
     """
     """
     Exercice 2 validé par le professeur
-    """  
+    """
     
-    #Exercice 3
-    for i in range(len(reactions)):
+    # #Exercice 3
+    for i in range(len(reactions[:20])):
         print('Réaction numéro', i+1)
         print('Vecteur de la réaction :')
         print('   Coordonnées x du vecteur:', reactions[i].vecteur.x)
@@ -73,45 +73,3 @@ if __name__ == "__main__":
         print('   Coordonnées z du vecteur:', reactions[i].vecteur.z)
         print('Nombre de sous-produits de la réaction :', reactions[i].nb_sous_reactifs)
         print('\n')
-        
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    

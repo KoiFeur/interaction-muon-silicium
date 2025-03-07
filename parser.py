@@ -91,15 +91,18 @@ def parser(file: str) -> list:
             if "---" in line:
                 liste.append(line) #add each reaction line
             else:
-                liste[-1]+=line
-        print("\nClean up : \n")
-        liste = [[[a for a in v.split(" ") if a != ""] for v in i.split("\n") if v != ""] for i in tqdm(liste)][1:] #clean up a little bit. 
+                liste[-1]+=line        
+        #print("\nClean up : \n")
+        #liste = [[[a for a in v.split(" ") if a != ""] for v in i.split("\n") if v != ""] for i in tqdm(liste)][1:] #clean up a little bit. 
                                                                                                                     #The [1:] delete the element added for the code to not crash
+        #it's not necessary
 
     print("\n\nObject list creation : \n")
 
     reactions = []
-    for v in tqdm(liste):
+    for i in tqdm(liste[1:]):
+        v = [[a for a in j.split(" ") if a != ""] for j in i.split("\n") if j != ""] 
+
         energie = float(v[1][3])
         in_vec = Vecteur(v[1][0], v[1][1], v[1][2])
         
