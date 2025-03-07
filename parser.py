@@ -69,9 +69,9 @@ class Reaction:
         clean_eq = [v.split("Si")[0] for v in reaction_equation]
         right = clean_eq[clean_eq.index("-->"):]
         if "" in right:
-            return "inelastique"
+            return "Inelastique"
         else:
-            return "absorption"
+            return "Absorption"
 
     def __init__(self, energie : float, vec: Vecteur, sous_reactions: list, reaction_equation: list):
         self.reaction_equation: list[str] = reaction_equation
@@ -115,4 +115,3 @@ def parser(file: str) -> list:
         reactions.append(Reaction(energie, in_vec, sous_reactions, reactions_equation))
     print("\n")
     return reactions
-
