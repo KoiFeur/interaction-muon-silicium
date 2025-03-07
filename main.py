@@ -8,7 +8,7 @@ import analyse_reac
 
 if __name__ == "__main__":
     try:
-        reactions = parser.parser("secondaries_500MeV.txt")
+        reactions = parser.parser("testing_limit.txt")
     except IndexError:
         print(bcolors.FAIL + "\nPlease put the name of the file here" + bcolors.ENDC)
         print(bcolors.FAIL + "python3 main.py [file to analyse]\n" + bcolors.ENDC)
