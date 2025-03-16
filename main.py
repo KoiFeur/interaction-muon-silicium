@@ -7,6 +7,10 @@ import analyse_reac
 import numpy as np
 
 from matplotlib import colors
+from matplotlib.ticker import PercentFormatter
+
+
+
 """
 Rappel des différents objectifs :
     - Compter le nombre de réactions et le type des réactions (élastiques, inélastiques, absorption).
@@ -21,10 +25,6 @@ Rappel des différents objectifs :
     
 """
 
-
-
-
-from matplotlib.ticker import PercentFormatter
 
 
 if __name__ == "__main__":
@@ -71,11 +71,11 @@ if __name__ == "__main__":
                                                                             #On veut ensuite déterminer le nombre de chaque type de produits secondaires : 
                                                                                     #proton, neutron, deutron, triton, gamma, Si27, Mg25, Si28 ...
     
-    
+    """
     print("\n")
     nb_gamma = analyse_reac.nbr_gamma(reactions)
     print(nb_gamma)
-   
+   """
     
    
     
