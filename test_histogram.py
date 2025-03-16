@@ -24,3 +24,12 @@ axs[0].hist(dist1, bins=n_bins)
 axs[1].hist(dist2, bins=n_bins)
 
 plt.show()
+
+#%%
+notes = [10, 12, 6, 17, 15, 14, 15, 16, 17, 13, 15, 10, 16, 16, 16, 16]
+plt.hist(notes, range = (0, 20), bins=50) 
+plt.xticks(range(0, 21, 2))
+
+
+
+plt.show()

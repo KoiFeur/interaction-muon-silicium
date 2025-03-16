@@ -7,6 +7,23 @@ import analyse_reac
 import numpy as np
 
 from matplotlib import colors
+"""
+Rappel des différents objectifs :
+    - Compter le nombre de réactions et le type des réactions (élastiques, inélastiques, absorption).
+    Etat : fait, peut-être "améliorer" le code ?
+    
+    - Compter le nombre et le type de produits secondaires (gamma, protons, Mg25, Si28,….) produits par
+    types de réactions et au total – Représenter graphiquement les résultats.
+    Etat : nbr de sous produits total fait, pas le reste.
+    
+    - Tracer les histogrammes en énergie des produits secondaires par type de produits.
+    
+    
+"""
+
+
+
+
 from matplotlib.ticker import PercentFormatter
 
 
@@ -22,7 +39,7 @@ if __name__ == "__main__":
         
     
     
-    #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
+                                                                        #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
     nb_type_reac = analyse_reac.reactiontype(reactions)
     nb_el = nb_type_reac[0]
     nb_inel = nb_type_reac[1]
@@ -32,42 +49,34 @@ if __name__ == "__main__":
     print("Il y a", nb_el, "réactions/chocs élastiques.")
     print("Il y a", nb_inel, "réactions/chocs inélastiques.")
     print("Il y a", nb_abs, "absorptions.")
-    #On cherche ensuite à classer sur un histograme les 3 diff types de réactions
+                                                                        #On cherche ensuite à classer sur un histograme les 3 diff types de réactions
+
     x = np.arange(len(nb_total_reac))
     plt.figure(figsize=(8, 5))
-    plt.bar(0, nb_el, 1, label="Nombre de réactions élastiques")
-    plt.bar(1, nb_inel, 1, label="Nombre de réactions inélastiques")
-    plt.bar(2, nb_abs, 1, label="Nombre d'absorptions")
+    plt.bar(0, nb_el, 1, label="Nombre de réactions élastiques", color = "lightskyblue")
+    plt.bar(1, nb_inel, 1, label="Nombre de réactions inélastiques", color = "cornflowerblue")
+    plt.bar(2, nb_abs, 1, label="Nombre d'absorptions", color = "royalblue")
     plt.xlabel("Classes de Réactions")
     plt.ylabel("Nombre d'occurrences")
     plt.title("Histogramme des Réactions")
     plt.legend()
     plt.xticks([])
     plt.show()
+
     
     
-    
-    
-    
-    
-    #Dans cette section, on cherche à afficher l'énergie de chaque réac sur un histogramme
-    #analyse_reac.energies(reactions)
-    
-    
-    
-    
-    
-    #Dans cette section, on cherche à déterminer le nombre de sous-produit pour tout le fichier
+                                                                            #Dans cette section, on cherche à déterminer le nombre de sous-produit pour tout le fichier
     nb_sous_prod_tot = analyse_reac.nb_sous_prod_tot(reactions)
-    print("Il y a au total ", nb_sous_prod_tot, "sous-produits dans ce fichiers.")
+    print("Il y a au total ", nb_sous_prod_tot, "sous-produits de créés.")
+                                                                            #On veut ensuite déterminer le nombre de chaque type de produits secondaires : 
+                                                                                    #proton, neutron, deutron, triton, gamma, Si27, Mg25, Si28 ...
+    
+    
+    print("\n")
+    nb_gamma = analyse_reac.nbr_gamma(reactions)
+    print(nb_gamma)
    
-    """
-    #objectif : réaliser un histograme pour "classer" les énergies
-    n_bins = 20
-    fig, axs = plt.subplots(1, 2, sharey=True, tight_layout=True)
-    axs[0].hist(nb_sous_prod_tot, bins=n_bins)
-    plt.show()
-    """
+    
    
     
    

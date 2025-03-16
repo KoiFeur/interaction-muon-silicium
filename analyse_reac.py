@@ -17,15 +17,19 @@ def reactiontype(reactions: list) -> list:
     
     
 def nb_sous_prod_tot(reactions: list) -> int:
+    "Used to determine the nimber of sub-products in the entire file"
     nb_sous_prod_tot = 0
     for reaction in reactions:
         nb_sous_prod_tot += reaction.nb_sous_reactifs
     return nb_sous_prod_tot
-        
-    
 
 
+def nbr_gamma(reactions: list) -> int:
+    "Used to determine how many gamma ray are in the file"
+    nb_gamma = 0
+    for sub_product in reactions:
+        if sub_product.name == "gamma":
+            nb_gamma =+ 1
+    return nb_gamma
             
-
-
-
+       
