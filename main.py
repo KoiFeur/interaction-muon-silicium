@@ -71,11 +71,17 @@ if __name__ == "__main__":
                                                                             #On veut ensuite déterminer le nombre de chaque type de produits secondaires : 
                                                                                     #proton, neutron, deutron, triton, gamma, Si27, Mg25, Si28 ...
     
-    """
-    print("\n")
-    nb_gamma = analyse_reac.nbr_gamma(reactions)
-    print(nb_gamma)
-   """
+    
+    print("\n")                                         #nombre de rayons gamma
+    nb_gamma = analyse_reac.nb_gamma(reactions)
+    print('Il y a au total', nb_gamma, "rayons gamma de créés.")
+    print("\n")                                         #nombre de rayons gamma
+    nb_gamma = analyse_reac.nb_neutron(reactions)
+    print('Il y a au total', nb_neutron, "neutrons de créés.")
+    print("\n")                                         #nombre de rayons gamma
+    nb_gamma = analyse_reac.nb_gamma(reactions)
+    print('Il y a au total', nb_deutron, "rayon gamma de créés.")
+    
     
    
     

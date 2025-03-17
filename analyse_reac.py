@@ -24,12 +24,80 @@ def nb_sous_prod_tot(reactions: list) -> int:
     return nb_sous_prod_tot
 
 
-def nbr_gamma(reactions: list) -> int:
+
+
+
+def nb_gamma(reactions: list) -> int:
     "Used to determine how many gamma ray are in the file"
     nb_gamma = 0
-    for sub_product in reactions:
-        if sub_product.name == "gamma":
-            nb_gamma =+ 1
+    for reaction in reactions:
+        for i in reaction.sous_reactions:
+            if i.name == "gamma":
+                nb_gamma += 1
     return nb_gamma
+
+
+def nb_neutron(reactions: list) -> int:
+    "Used to determine how many neutron ray are in the file"
+    nb_neutron = 0
+    for reaction in reactions:
+        for i in reaction.sous_reactions:
+            if i.name == "neutron":
+                nb_neutron += 1
+    return nb_neutron
+
+
+def nb_deutron(reactions: list) -> int:
+    "Used to determine how many deutron ray are in the file"
+    nb_deutron = 0
+    for reaction in reactions:
+        for i in reaction.sous_reactions:
+            if i.name == "deutron":
+                nb_deutron += 1
+    return nb_deutron
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
        

@@ -109,7 +109,6 @@ def parser(file: str) -> list:
         sous_reactions = []
         for i in v[2:]:
             sous_reactions.append(Sub_product(i[0], float(i[1]), Vecteur(i[2], i[3], i[4])))
-
         reactions_equation = v[0][2:]
         
         reactions.append(Reaction(energie, in_vec, sous_reactions, reactions_equation))
