@@ -72,15 +72,28 @@ if __name__ == "__main__":
                                                                                     #proton, neutron, deutron, triton, gamma, Si27, Mg25, Si28 ...
     
     
-    print("\n")                                         #nombre de rayons gamma
-    nb_gamma = analyse_reac.nb_gamma(reactions)
-    print('Il y a au total', nb_gamma, "rayons gamma de créés.")
-    print("\n")                                         #nombre de rayons gamma
-    nb_gamma = analyse_reac.nb_neutron(reactions)
-    print('Il y a au total', nb_neutron, "neutrons de créés.")
-    print("\n")                                         #nombre de rayons gamma
-    nb_gamma = analyse_reac.nb_gamma(reactions)
-    print('Il y a au total', nb_deutron, "rayon gamma de créés.")
+    print("\n")
+    nb_gammas, nb_neutrons, nb_deuterons, nb_tritons, nb_protons = analyse_reac.nb_sub_product(reactions)
+    print('Il y a au total', nb_gammas, "rayons gammas de créés.")                                         #nombre de rayons gamma
+    print('Il y a au total', nb_neutrons, "neutrons de créés.")                                        #nombre de rayons gamma
+    print('Il y a au total', nb_deuterons, "deuterons de créés.")
+    print('Il y a au total', nb_tritons, "tritons de créés.")
+    print('Il y a au total', nb_protons, "protons de créés.")
+
+    
+    
+    
+    plt.bar(0, nb_gammas, 1, label = "Nombre de rayons gammas")
+    plt.bar(1, nb_neutrons, 1, label = "Nombre de neutrons")
+    plt.bar(2, nb_deuterons, 1, label = "Nombre de deuterons")
+    plt.bar(3, nb_tritons, 1, label = "Nombre de tritons")
+    plt.bar(4, nb_protons, 1, label = "Nombre de protons")
+    plt.legend()
+    plt.xlabel("Types de sous-produits")
+    plt.ylabel("Quantité de sous-produits créés")
+    plt.show()
+
+    
     
     
    

@@ -24,37 +24,35 @@ def nb_sous_prod_tot(reactions: list) -> int:
     return nb_sous_prod_tot
 
 
-
-
-
-def nb_gamma(reactions: list) -> int:
-    "Used to determine how many gamma ray are in the file"
-    nb_gamma = 0
+def nb_sub_product(reactions: list) -> int:
+    """
+    dic = {
+        "nb_gammas":0, 
+        "nb_neutrons":0,
+        "nb_deuterons":0,
+        "nb"
+        }
+    """
+    nb_gammas = 0
+    nb_neutrons = 0
+    nb_deuterons = 0
+    nb_tritons = 0
+    nb_protons = 0
     for reaction in reactions:
         for i in reaction.sous_reactions:
             if i.name == "gamma":
-                nb_gamma += 1
-    return nb_gamma
-
-
-def nb_neutron(reactions: list) -> int:
-    "Used to determine how many neutron ray are in the file"
-    nb_neutron = 0
-    for reaction in reactions:
-        for i in reaction.sous_reactions:
+                nb_gammas += 1
             if i.name == "neutron":
-                nb_neutron += 1
-    return nb_neutron
+                nb_neutrons += 1
+            if i.name == "deuteron":
+                nb_deuterons += 1
+            if i.name == "triton":
+                nb_tritons += 1
+            if i.name == "proton":
+                nb_protons += 1
+    return nb_gammas, nb_neutrons, nb_deuterons, nb_tritons, nb_protons
+            
 
-
-def nb_deutron(reactions: list) -> int:
-    "Used to determine how many deutron ray are in the file"
-    nb_deutron = 0
-    for reaction in reactions:
-        for i in reaction.sous_reactions:
-            if i.name == "deutron":
-                nb_deutron += 1
-    return nb_deutron
 
 
 
