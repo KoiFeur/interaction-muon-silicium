@@ -38,6 +38,8 @@ def nb_sub_product(reactions: list) -> int:
     nb_deuterons = 0
     nb_tritons = 0
     nb_protons = 0
+    nb_alphas = 0
+    nb_Si28 = 0
     for reaction in reactions:
         for i in reaction.sous_reactions:
             if i.name == "gamma":
@@ -50,7 +52,11 @@ def nb_sub_product(reactions: list) -> int:
                 nb_tritons += 1
             if i.name == "proton":
                 nb_protons += 1
-    return nb_gammas, nb_neutrons, nb_deuterons, nb_tritons, nb_protons
+            if i.name == "Si28":
+                nb_Si28 += 1
+            if i.name == "alpha":
+                nb_alphas += 1
+    return nb_gammas, nb_neutrons, nb_deuterons, nb_tritons, nb_protons, nb_alphas, nb_Si28
             
 
 
