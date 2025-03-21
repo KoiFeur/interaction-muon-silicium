@@ -88,6 +88,8 @@ def parser(file: str) -> list:
     liste=[""] #else there is out of range error due tu the liste[-1]+=line line
     with open(file, "r") as dft:
         for line in tqdm(dft): #read file
+            if "[" in line:
+                line = line.split("[")[0] + line.split("]")[1]
             if "---" in line:
                 liste.append(line) #add each reaction line
             else:

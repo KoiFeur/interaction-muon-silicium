@@ -101,6 +101,8 @@ if __name__ == "__main__":
     plt.show()
 
     
+    energie=analyse_reac.lvl_energie(reactions)
+    print(energie["neutron"])
     
     
    

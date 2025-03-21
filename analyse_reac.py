@@ -60,7 +60,19 @@ def nb_sub_product(reactions: list) -> int:
             
 
 
-
+def lvl_energie(reactions: list) -> list:
+    "indicate the amount of energy for each sub product"
+    energie={}
+    
+    for reaction in reactions:
+        for i in reaction.sous_reactions:
+            if i.name not in energie:
+                energie[i.name]=[i.energie]
+            else:
+                energie[i.name].append(i.energie)
+    return energie            
+    
+    
 
 
 
