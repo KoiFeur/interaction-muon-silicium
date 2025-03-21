@@ -85,7 +85,9 @@ if __name__ == "__main__":
     plt.xticks([])
     #plt.legend()
     plt.show()
-    
+
+    energie=analyse_reac.lvl_energie(reactions)
+    print(energie["neutron"])
    
     
    
