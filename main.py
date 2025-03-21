@@ -73,37 +73,18 @@ if __name__ == "__main__":
     
     
     print("\n")
-    nb_gammas, nb_neutrons, nb_deuterons, nb_tritons, nb_protons, nb_alphas, nb_Si28 = analyse_reac.nb_sub_product(reactions)
-    print("Il y a au total :")
-    print("-->", nb_gammas, "rayons gammas de créés.")                                         #nombre de rayons gamma
-    print("-->", nb_neutrons, "neutrons de créés.")                                        #nombre de rayons gamma
-    print("-->", nb_deuterons, "deuterons de créés.")
-    print("-->", nb_tritons, "tritons de créés.")
-    print("-->", nb_protons, "protons de créés.")
-    print("-->", nb_alphas, "particules alpha créées")
-    print("-->", nb_Si28, "atomes de Silicium 28")
-
+    dic_sorted = analyse_reac.nb_sub_product(reactions)
     
-    
-    
-    plt.bar(0, nb_gammas, 1, label = "Nombre de rayons gammas")
-    plt.bar(1, nb_neutrons, 1, label = "Nombre de neutrons")
-    plt.bar(2, nb_deuterons, 1, label = "Nombre de deuterons")
-    plt.bar(3, nb_tritons, 1, label = "Nombre de tritons")
-    plt.bar(4, nb_protons, 1, label = "Nombre de protons")
-    plt.bar(5, nb_alphas, 1, label = "Nombre de particules alphas")
-    plt.bar(6, nb_Si28, 1, label = "Nombre de Si28")
-
-
-    plt.legend()
-    plt.xlabel("Types de sous-produits")
-    plt.ylabel("Quantité de sous-produits créés")
+    k = 0
+    for key, value in dic_sorted.items():
+        plt.bar(k, value, 1, label=key)
+        k += 1
+    plt.yscale('log')
+    plt.grid()
+    plt.title("Type et quantité de chaque sous-produit")
+    plt.xticks([])
+    #plt.legend()
     plt.show()
-
-    
-    
-    
-   
     
    
     

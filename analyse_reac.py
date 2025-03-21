@@ -17,7 +17,7 @@ def reactiontype(reactions: list) -> list:
     
     
 def nb_sous_prod_tot(reactions: list) -> int:
-    "Used to determine the nimber of sub-products in the entire file"
+    "Used to determine the number of sub-products in the entire file"
     nb_sous_prod_tot = 0
     for reaction in reactions:
         nb_sous_prod_tot += reaction.nb_sous_reactifs
@@ -25,38 +25,19 @@ def nb_sous_prod_tot(reactions: list) -> int:
 
 
 def nb_sub_product(reactions: list) -> int:
-    """
-    dic = {
-        "nb_gammas":0, 
-        "nb_neutrons":0,
-        "nb_deuterons":0,
-        "nb"
-        }
-    """
-    nb_gammas = 0
-    nb_neutrons = 0
-    nb_deuterons = 0
-    nb_tritons = 0
-    nb_protons = 0
-    nb_alphas = 0
-    nb_Si28 = 0
+    "Used to determine the number of each kind of sub-product"
+    dic = {}
     for reaction in reactions:
         for i in reaction.sous_reactions:
-            if i.name == "gamma":
-                nb_gammas += 1
-            if i.name == "neutron":
-                nb_neutrons += 1
-            if i.name == "deuteron":
-                nb_deuterons += 1
-            if i.name == "triton":
-                nb_tritons += 1
-            if i.name == "proton":
-                nb_protons += 1
-            if i.name == "Si28":
-                nb_Si28 += 1
-            if i.name == "alpha":
-                nb_alphas += 1
-    return nb_gammas, nb_neutrons, nb_deuterons, nb_tritons, nb_protons, nb_alphas, nb_Si28
+            if i.name not in dic:
+                dic[i.name] = 1
+            else:
+                dic[i.name] += 1
+    dic_sorted = dict(sorted(dic.items(), key=lambda item:item[1]))
+    return dic_sorted
+
+
+
             
 
 
