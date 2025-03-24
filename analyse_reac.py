@@ -37,10 +37,6 @@ def nb_sub_product(reactions: list) -> int:
     return dic_sorted
 
 
-
-            
-
-
 def lvl_energie(reactions: list) -> list:
     "indicate the amount of energy for each sub product"
     energie={}

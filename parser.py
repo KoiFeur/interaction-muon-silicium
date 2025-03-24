@@ -68,7 +68,9 @@ class Reaction:
             return "Elastique"
         clean_eq = [v.split("Si")[0] for v in reaction_equation]
         right = clean_eq[clean_eq.index("-->"):]
-        if "" in right:
+        left = clean_eq[:clean_eq.index("-->")]
+
+        if right[1][0:2] == left[1][0:2]:
             return "Inelastique"
         else:
             return "Absorption"
