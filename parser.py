@@ -1,4 +1,5 @@
 from tqdm import tqdm
+import numpy as np
 
 class Vecteur:
     """
@@ -62,24 +63,31 @@ class Reaction:
     nb_sous_reactifs : int
         sub product number 
     """
+    def __get_reac(self, reaction_equation: list) -> list[str]: 
+        return [i for i in reaction_equation[:reaction_equation.index("-->")] if (i != "neutronInelastic" and i!="hadElastic" and i!= "+")]
     
+    def __get_subproducts_name(self) -> list[str]:
+        return [i.name for i in self.sous_reactions]
+
+
     def __get_reaction_type(self, reaction_equation: list) -> str:
         if reaction_equation[0] == "hadElastic":
             return "Elastique"
-        clean_eq = [v.split("Si")[0] for v in reaction_equation]
-        right = clean_eq[clean_eq.index("-->"):]
-        left = clean_eq[:clean_eq.index("-->")]
-
-        if right[1][0:2] == left[1][0:2]:
-            return "Inelastique"
         else:
+            reac = self.__get_reac(reaction_equation)
+            sub_product = self.__get_subproducts_name()
+            #print(product, self.__get_subproducts_name(), "gamma" in self.__get_subproducts_name())
+            if "Si28" in sub_product and "gamma" in sub_product:
+                #print("oui")
+                return "Inelastique"
             return "Absorption"
+
 
     def __init__(self, energie : float, vec: Vecteur, sous_reactions: list, reaction_equation: list):
         self.reaction_equation: list[str] = reaction_equation
         self.vecteur: Vecteur = vec
         self.energie: float = energie
-        self.sous_reactions: list[Sub_product] = sous_reactions
+        self.sous_reactions: list = np.array(sous_reactions)
         self.reaction_type: str = self.__get_reaction_type(self.reaction_equation)
         self.nb_sous_reactifs: int = len(self.sous_reactions)
 
@@ -105,7 +113,7 @@ def parser(file: str) -> list:
 
     reactions = []
     for i in tqdm(liste[1:]):
-        v = [[a for a in j.split(" ") if a != ""] for j in i.split("\n") if j != ""] 
+        v = [[a for a in j.split(" ") if a != ""] for j in i.split("\n") if j != ""]
 
         energie = float(v[1][3])
         in_vec = Vecteur(v[1][0], v[1][1], v[1][2])
@@ -117,4 +125,5 @@ def parser(file: str) -> list:
         
         reactions.append(Reaction(energie, in_vec, sous_reactions, reactions_equation))
     print("\n")
-    return reactions
+    #return reactions
+    return np.array(reactions)
