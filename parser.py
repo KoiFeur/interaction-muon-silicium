@@ -74,6 +74,7 @@ class Reaction:
         if reaction_equation[0] == "hadElastic":
             return "Elastique"
         else:
+            #aloo
             reac = self.__get_reac(reaction_equation)
             sub_product = self.__get_subproducts_name()
             #print(product, self.__get_subproducts_name(), "gamma" in self.__get_subproducts_name())
