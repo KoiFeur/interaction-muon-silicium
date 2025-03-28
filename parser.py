@@ -57,7 +57,7 @@ class Reaction:
     energie: float
         energie of the neutron
 
-    sous_reactions : list[Sub_product]
+    sous_reactions : ndarray[Sub_product]
         list of the reaction Sub_product
 
     nb_sous_reactifs : int
@@ -77,7 +77,8 @@ class Reaction:
             reac = self.__get_reac(reaction_equation)
             sub_product = self.__get_subproducts_name()
             #print(product, self.__get_subproducts_name(), "gamma" in self.__get_subproducts_name())
-            if "Si28" in sub_product and "gamma" in sub_product:
+            if reac[0] in sub_product and reac[1] in sub_product and len(set(sub_product)) == 3:
+                print(reac, set(sub_product))
                 #print("oui")
                 return "Inelastique"
             return "Absorption"
@@ -87,11 +88,11 @@ class Reaction:
         self.reaction_equation: list[str] = reaction_equation
         self.vecteur: Vecteur = vec
         self.energie: float = energie
-        self.sous_reactions: list = np.array(sous_reactions)
+        self.sous_reactions: np.ndarray = np.array(sous_reactions)
         self.reaction_type: str = self.__get_reaction_type(self.reaction_equation)
         self.nb_sous_reactifs: int = len(self.sous_reactions)
 
-def parser(file: str) -> list:
+def parser(file: str) -> np.ndarray:
     """parse things"""
 
     print("\nReading file\n")
