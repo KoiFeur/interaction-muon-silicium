@@ -16,12 +16,16 @@ def reactiontype(reactions: list) -> list:
     return [nb_el, nb_inel, nb_abs]
     
     
+    
+    
 def nb_sous_prod_tot(reactions: list) -> int:
     "Used to determine the number of sub-products in the entire file"
     nb_sous_prod_tot = 0
     for reaction in reactions:
         nb_sous_prod_tot += reaction.nb_sous_reactifs
     return nb_sous_prod_tot
+
+
 
 
 def nb_sub_product(reactions: list) -> int:
@@ -35,6 +39,7 @@ def nb_sub_product(reactions: list) -> int:
                 dic[i.name] += 1
     dic_sorted = dict(sorted(dic.items(), key=lambda item:item[1]))
     return dic_sorted
+
 
 
 def lvl_energie(reactions: list) -> list:

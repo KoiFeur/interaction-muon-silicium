@@ -74,7 +74,6 @@ if __name__ == "__main__":
     
     print("\n")
     dic_sorted = analyse_reac.nb_sub_product(reactions)
-    
     k = 0
     for key, value in dic_sorted.items():
         plt.bar(k, value, 1, label=key)
@@ -83,12 +82,38 @@ if __name__ == "__main__":
     plt.grid()
     plt.title("Type et quantité de chaque sous-produit")
     plt.xticks([])
-    #plt.legend()
     plt.show()
+    
+    print('\n')
+    print(len(dic_sorted))
+    
+    new_dic = {}
+    for key, value in dic_sorted.items():
+        if value > 500:
+            new_dic[key] = value
+        else:
+            continue
+            
+    print(new_dic)
+    
+    plt.barh(range(len(new_dic)), new_dic.values(), 0.5, tick_label=list(new_dic.keys()))
+    plt.yscale('log')
+    plt.title("Type et quantité de chaque sous-produit")
+    plt.xticks(rotation=90)
+    plt.show()
+    """
+    for key, value in new_dic.items():
+        if 
+    """
+
+
+
+
+
 
     energie=analyse_reac.lvl_energie(reactions)
-    #print(energie["neutron"])
-
+    #print(energie["neutron"]) #sort une longue liste donc en gris pour l'instant
+    
    
     
    
