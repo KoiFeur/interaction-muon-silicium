@@ -87,29 +87,63 @@ if __name__ == "__main__":
     plt.show()
 
     energie=analyse_reac.lvl_energie(reactions)
-    #print(energie["neutron"])
+    #print(energie["proton"])
+   
+    
+    print(max(energie["proton"]))
+    print(min(energie["proton"]))
+    #print((energie["proton"]))
+    
+energy_ranges = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
+nb_sr=[i for i in range(len(energy_ranges))]
+barres = [0] * len(energy_ranges)
+for i in range(len(energie["proton"])):
+    for idx, (low, high) in enumerate(energy_ranges):
+        if low <= energie["proton"][i] <= high:
+            barres[idx] += 1
+name=[f"{low}-{high}eV" for  low, high in energy_ranges]    
+plt.bar(range(len(energy_ranges)),barres,tick_label=name)
+plt.xticks(rotation=90)
+plt.title("Energies des sous produits proton")
+plt.show()
+    
+   
+print(max(energie["neutron"]))
+print(min(energie["neutron"]))
+   
+   
+energy_ranges = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
+nb_sr=[i for i in range(len(energy_ranges))]
+barres = [0] * len(energy_ranges)
+for i in range(len(energie["neutron"])):
+    for idx, (low, high) in enumerate(energy_ranges):
+        if low <= energie["neutron"][i] <= high:
+            barres[idx] += 1
+name=[f"{low}-{high}eV" for  low, high in energy_ranges]    
+plt.bar(range(len(energy_ranges)),barres,tick_label=name)
+plt.xticks(rotation=90)
+plt.title("Energies des sous produits neutron")
+plt.show()
 
-   
+
+print(max(energie["gamma"]))
+print(min(energie["gamma"]))    
+
+energy_ranges = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
+nb_sr=[i for i in range(len(energy_ranges))]
+barres = [0] * len(energy_ranges)
+for i in range(len(energie["gamma"])):
+    for idx, (low, high) in enumerate(energy_ranges):
+        if low <= energie["gamma"][i] <= high:
+            barres[idx] += 1
+name=[f"{low}-{high}eV" for  low, high in energy_ranges]    
+plt.bar(range(len(energy_ranges)),barres,tick_label=name)
+plt.xticks(rotation=90)
+plt.title("Energies des sous produits gamma")
+plt.show()   
     
    
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
-    
-   
+
     
    
     
