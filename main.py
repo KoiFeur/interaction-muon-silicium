@@ -110,66 +110,118 @@ if __name__ == "__main__":
 
 
 
-
-
     energie=analyse_reac.lvl_energie(reactions)
 
-    #print(energie["proton"])
-   
-    print(max(energie["proton"]))
-    print(min(energie["proton"]))
-    #print((energie["proton"]))
-    
-    energy_ranges = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
-    nb_sr=[i for i in range(len(energy_ranges))]
-    barres = [0] * len(energy_ranges)
-    for i in range(len(energie["proton"])):
-       for idx, (low, high) in enumerate(energy_ranges):
-           if low <= energie["proton"][i] <= high:
-               barres[idx] += 1
-    name=[f"{low}-{high}eV" for  low, high in energy_ranges]    
-    plt.bar(range(len(energy_ranges)),barres,tick_label=name)
-    plt.xticks(rotation=90)
-    plt.title("Energies des sous produits proton")
-    plt.show()
     
    
-    print(max(energie["neutron"]))
-    print(min(energie["neutron"]))
    
-   
-    energy_ranges = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
-    nb_sr=[i for i in range(len(energy_ranges))]
-    barres = [0] * len(energy_ranges)
+    energy_rangesNe = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
+    nb_srNe=[i for i in range(len(energy_rangesNe))]
+    barresNe = [0] * len(energy_rangesNe)
     for i in range(len(energie["neutron"])):
-       for idx, (low, high) in enumerate(energy_ranges):
+       for idx, (low, high) in enumerate(energy_rangesNe):
            if low <= energie["neutron"][i] <= high:
-               barres[idx] += 1
-    name=[f"{low}-{high}eV" for  low, high in energy_ranges]    
-    plt.bar(range(len(energy_ranges)),barres,tick_label=name)
+               barresNe[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesNe]    
+    plt.bar(range(len(energy_rangesNe)),barresNe,tick_label=name)
     plt.xticks(rotation=90)
     plt.title("Energies des sous produits neutron")
     plt.show()
+    print(f"Le maximum d'énergie des sous produits neutron est : {max(energie['neutron'])}")
+    print(f"Le minimum d'énergie des sous produits neutron est : {min(energie['neutron'])}")  
 
 
-    print(max(energie["gamma"]))
-    print(min(energie["gamma"]))    
-
-    energy_ranges = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
-    nb_sr=[i for i in range(len(energy_ranges))]
-    barres = [0] * len(energy_ranges)
+    energy_rangesGam = [(0, 2), (2, 4), (4, 6), (6, 8), (8, 10), (10, 12), (12, 14), (14, 16), (16, 18)]
+    nb_srGam=[i for i in range(len(energy_rangesGam))]
+    barresGam = [0] * len(energy_rangesGam)
     for i in range(len(energie["gamma"])):
-        for idx, (low, high) in enumerate(energy_ranges):
+        for idx, (low, high) in enumerate(energy_rangesGam):
             if low <= energie["gamma"][i] <= high:
-                barres[idx] += 1
-    name=[f"{low}-{high}eV" for  low, high in energy_ranges]    
-    plt.bar(range(len(energy_ranges)),barres,tick_label=name)
+                barresGam[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesGam]    
+    plt.bar(range(len(energy_rangesGam)),barresGam,tick_label=name)
     plt.xticks(rotation=90)
     plt.title("Energies des sous produits gamma")
-    plt.show()   
+    plt.show()
+    print(f"Le maximum d'énergie des sous produits gamma est : {max(energie['gamma'])}")
+    print(f"Le minimum d'énergie des sous produits gamma est : {min(energie['gamma'])}")    
+    
+    
+    energy_rangesPr = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
+    nb_srPr=[i for i in range(len(energy_rangesPr))]
+    barresPr = [0] * len(energy_rangesPr)
+    for i in range(len(energie["proton"])):
+       for idx, (low, high) in enumerate(energy_rangesPr):
+           if low <= energie["proton"][i] <= high:
+               barresPr[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesPr]    
+    plt.bar(range(len(energy_rangesPr)),barresPr,tick_label=name)
+    plt.xticks(rotation=90)
+    plt.title("Energies des sous produits proton")
+    plt.show()
+    print(f"Le maximum d'énergie des sous produits proton est : {max(energie['proton'])}")
+    print(f"Le minimum d'énergie des sous produits proton est : {min(energie['proton'])}")  
+    
+    
+    energy_rangesSi = [(0, 1), (1, 2), (2, 3), (3, 4), (4, 5), (6, 7), (7, 8), (8, 9), (9, 10)]
+    nb_srSi=[i for i in range(len(energy_rangesSi))]
+    barresSi = [0] * len(energy_rangesSi)
+    for i in range(len(energie["Si28"])):
+        for idx, (low, high) in enumerate(energy_rangesSi):
+            if low <= energie["Si28"][i] <= high:
+                barresSi[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesSi]    
+    plt.bar(range(len(energy_rangesSi)),barresSi,tick_label=name)
+    plt.xticks(rotation=90)
+    plt.title("Energies des sous produits Si28")
+    plt.show()
+    print(f"Le maximum d'énergie des sous produits Si28 est : {max(energie['Si28'])}")
+    print(f"Le minimum d'énergie des sous produits Si28 est : {min(energie['Si28'])}")  
+        
 
-    
-   
+    energy_rangesAl = [(0, 10), (10, 20), (20, 30), (30, 40), (40, 50), (50, 60), (60, 70)]
+    nb_srAl=[i for i in range(len(energy_rangesAl))]
+    barresAl = [0] * len(energy_rangesAl)
+    for i in range(len(energie["alpha"])):
+        for idx, (low, high) in enumerate(energy_rangesAl):
+            if low <= energie["alpha"][i] <= high:
+                barresAl[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesAl]    
+    plt.bar(range(len(energy_rangesAl)),barresAl,tick_label=name)
+    plt.xticks(rotation=90)
+    plt.title("Energies des sous produits alpha")
+    plt.show()
+    print(f"Le maximum d'énergie des sous produits alpha est : {max(energie['alpha'])}")
+    print(f"Le minimum d'énergie des sous produits alpha est : {min(energie['alpha'])}")  
+       
 
+    energy_rangesDe = [(0, 10), (10, 20), (20, 30), (30, 40), (40, 50), (50, 60)]
+    nb_srDe=[i for i in range(len(energy_rangesDe))]
+    barresDe = [0] * len(energy_rangesDe)
+    for i in range(len(energie["deuteron"])):
+        for idx, (low, high) in enumerate(energy_rangesDe):
+            if low <= energie["deuteron"][i] <= high:
+                barresDe[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesDe]    
+    plt.bar(range(len(energy_rangesDe)),barresDe,tick_label=name)
+    plt.xticks(rotation=90)
+    plt.title("Energies des sous produits deuteron")
+    plt.show()
+    print(f"Le maximum d'énergie des sous produits deuteron est : {max(energie['deuteron'])}")
+    print(f"Le minimum d'énergie des sous produits deuteron est : {min(energie['deuteron'])}")  
     
     
+    energy_rangesAl27 = [(0, 2), (2, 4), (4, 6), (6, 8), (8, 10), (10, 12), (12, 14)]
+    nb_srAl27=[i for i in range(len(energy_rangesAl27))]
+    barresAl27 = [0] * len(energy_rangesAl27)
+    for i in range(len(energie["Al27"])):
+        for idx, (low, high) in enumerate(energy_rangesAl27):
+            if low <= energie["Al27"][i] <= high:
+                barresAl27[idx] += 1
+    name=[f"{low}-{high}eV" for  low, high in energy_rangesAl27]    
+    plt.bar(range(len(energy_rangesAl27)),barresAl27,tick_label=name)
+    plt.xticks(rotation=90)
+    plt.title("Energies des sous produits Al27")
+    plt.show()
+    print(f"Le maximum d'énergie des sous produits Al27 est : {max(energie['Al27'])}")
+    print(f"Le minimum d'énergie des sous produits Al27 est : {min(energie['Al27'])}") 
