@@ -63,10 +63,10 @@ class Reaction:
     nb_sous_reactifs : int
         sub product number 
     """
-    def __get_reac(self, reaction_equation: list) -> list[str]: 
+    def __get_reac(self, reaction_equation: list) -> list: 
         return [i for i in reaction_equation[:reaction_equation.index("-->")] if (i != "neutronInelastic" and i!="hadElastic" and i!= "+")]
     
-    def __get_subproducts_name(self) -> list[str]:
+    def __get_subproducts_name(self) -> list:
         return [i.name for i in self.sous_reactions]
 
 
