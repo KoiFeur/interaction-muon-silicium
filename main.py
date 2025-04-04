@@ -40,7 +40,7 @@ if __name__ == "__main__":
     
     
                                                                         #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
-    nb_type_reac = analyse_reac.reactiontype(reactions)
+    nb_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
     nb_el = nb_type_reac[0]
     nb_inel = nb_type_reac[1]
     nb_abs = nb_type_reac[2]
@@ -49,6 +49,7 @@ if __name__ == "__main__":
     print("Il y a", nb_el, "réactions/chocs élastiques.")
     print("Il y a", nb_inel, "réactions/chocs inélastiques.")
     print("Il y a", nb_abs, "absorptions.")
+    print(dic_el)
                                                                         #On cherche ensuite à classer sur un histograme les 3 diff types de réactions
 
     x = np.arange(len(nb_total_reac))

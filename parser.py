@@ -79,7 +79,7 @@ class Reaction:
             sub_product = self.__get_subproducts_name()
             #print(product, self.__get_subproducts_name(), "gamma" in self.__get_subproducts_name())
             if reac[0] in sub_product and reac[1] in sub_product and len(set(sub_product)) == 3:
-                print(reac, set(sub_product))
+                #print(reac, set(sub_product))
                 #print("oui")
                 return "Inelastique"
             return "Absorption"

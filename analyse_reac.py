@@ -6,14 +6,32 @@ def reactiontype(reactions: list) -> list:
     nb_el = 0
     nb_inel = 0
     nb_abs = 0
+    dic_el = {}
+    dic_inel = {}
+    dic_abs = {}
     for reaction in reactions:
         if reaction.reaction_type == "Elastique":
             nb_el += 1
+            for i in reaction.sous_reactions:
+                if i.name not in dic_el:
+                    dic_el[i.name] = 1
+                else:
+                    dic_el[i.name] += 1
         elif reaction.reaction_type == "Inelastique":
             nb_inel += 1
+            for i in reaction.sous_reactions:
+                if i.name not in dic_inel:
+                    dic_inel[i.name] = 1
+                else:
+                    dic_inel[i.name] += 1
         elif reaction.reaction_type == "Absorption":
             nb_abs += 1
-    return [nb_el, nb_inel, nb_abs]
+            for i in reaction.sous_reactions:
+                if i.name not in dic_abs:
+                    dic_abs[i.name] = 1
+                else:
+                    dic_abs[i.name] += 1
+    return [nb_el, nb_inel, nb_abs], dic_el, dic_inel, dic_abs
     
     
     
