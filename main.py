@@ -39,46 +39,65 @@ if __name__ == "__main__":
         
     
     
-                                                                        #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
-    nb_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
-    nb_el = nb_type_reac[0]
-    nb_inel = nb_type_reac[1]
-    nb_abs = nb_type_reac[2]
+    
+    
+    """
+    Objectif n°1 : compter le nombre de réactions et le type des 
+    réactions (élastiques, inélastiques, absorption)
+    """
+                                                                       
+    dic_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
+    print(dic_type_reac)
+    nb_el = dic_type_reac["Elastic"]
+    nb_inel = dic_type_reac["Inelastic"]
+    nb_abs = dic_type_reac["Absorptions"]
     nb_total_reac = [nb_el, nb_inel, nb_abs]
-    print("Il y a en tout", nb_abs+nb_el+nb_inel, "réactions.")
-    print("Il y a", nb_el, "réactions/chocs élastiques.")
-    print("Il y a", nb_inel, "réactions/chocs inélastiques.")
-    print("Il y a", nb_abs, "absorptions.")
-    print(dic_el)
-                                                                        #On cherche ensuite à classer sur un histograme les 3 diff types de réactions
-
-    x = np.arange(len(nb_total_reac))
-    plt.figure(figsize=(8, 5))
-    plt.bar(0, nb_el, 1, label="Nombre de réactions élastiques", color = "lightskyblue")
-    plt.bar(1, nb_inel, 1, label="Nombre de réactions inélastiques", color = "cornflowerblue")
-    plt.bar(2, nb_abs, 1, label="Nombre d'absorptions", color = "royalblue")
-    plt.xlabel("Classes de Réactions")
-    plt.ylabel("Nombre d'occurrences")
-    plt.title("Histogramme des Réactions")
+    print("There are", nb_abs+nb_el+nb_inel, "reactions.")
+    print("There are", nb_el, "elastic reactions/chocs,", nb_inel, "inelastic reactions/chocs, et", nb_abs, "absorptions.")
+    
+    plt.bar(0, nb_el, 1, label="Number of elastic reactions", color = "lightskyblue")
+    plt.bar(1, nb_inel, 1, label="Number of inelastic reactions", color = "cornflowerblue")
+    plt.bar(2, nb_abs, 1, label="Number of absorptions", color = "royalblue")    
+    q = 0
+    for nbtypereac in nb_total_reac:
+        plt.text(q, nbtypereac, nbtypereac)
+        q += 1
+    plt.xlabel("Reaction's type")
+    plt.ylabel("Number of occurrences")
+    plt.title("Reaction's histogram")
     plt.legend()
     plt.xticks([])
     plt.show()
 
     
-    
-                                                                            #Dans cette section, on cherche à déterminer le nombre de sous-produit pour tout le fichier
-    nb_sous_prod_tot = analyse_reac.nb_sous_prod_tot(reactions)
-    print("Il y a au total ", nb_sous_prod_tot, "sous-produits de créés.")
-                                                                               #On veut ensuite déterminer le nombre de chaque type de produits secondaires : 
-                                                                                    #proton, neutron, deutron, triton, gamma, Si27, Mg25, Si28 ...
-    
-    print("\n")
-    dic_sorted = analyse_reac.nb_sub_product(reactions)
-    print(dic_sorted)
 
-    k = 0
+
+
+    print("\n")
+    """
+    Objectif n°2 : compter le nombre et le type de produits secondaires 
+    (gamma, protons, Mg25, Si28,….) produits par types de réactions et 
+    au total – Représenter graphiquement les résultats.
+    """
+    
+    tot_nb_sub_prod = analyse_reac.nb_sous_prod_tot(reactions)
+    dic_sorted = analyse_reac.nb_sub_product(reactions)
+    print("There is a total of", tot_nb_sub_prod, "sub-products created.")
+    print("There are", len(dic_sorted), "different kinds of sub-products.")
+    print("Here are every types of sub-product and how often they appear :", dic_sorted)
+    print("\n")
+    #limit = float(input("Please enter the limit of energy you are interested in (in eV):"))
+    new_dic = {}
     for key, value in dic_sorted.items():
-        plt.bar(k, value, 1, label=key)
+        if value > 1000:
+            new_dic[key] = value
+        else:
+            continue
+    
+    k = 0
+    for key, value in new_dic.items():
+        plt.bar(k+0.5, value, 1, label=key)
+        plt.text(k, value, value)
         k += 1
     plt.yscale('log')
     plt.grid()
@@ -86,36 +105,18 @@ if __name__ == "__main__":
     plt.xticks([])
     plt.show()
     
-    print('\n')
-    print(len(dic_sorted))
+    print("Here are the kind and number of each sub-product in elastic reactions :", dic_el)
+    print("Here are the kind and number of each sub-product in inelastic reactions :", dic_inel)
+    print("Here are the kind and number of each sub-product in absorptions :", dic_abs)
+        
     
-    new_dic = {}
-    for key, value in dic_sorted.items():
-        if value > 500:
-            new_dic[key] = value
-        else:
-            continue
-            
-    print(new_dic)
-    
-    plt.barh(range(len(new_dic)), new_dic.values(), 0.5, tick_label=list(new_dic.keys()))
-    plt.yscale('log')
-    plt.title("Type et quantité de chaque sous-produit")
-    plt.xticks(rotation=90)
-    plt.show()
-    """
-    for key, value in new_dic.items():
-        if 
-    """
 
 
 
-
+#%%
     energie=analyse_reac.lvl_energie(reactions)
 
-    
-   
-   
+       
     energy_rangesNe = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
     nb_srNe=[i for i in range(len(energy_rangesNe))]
     barresNe = [0] * len(energy_rangesNe)
@@ -226,3 +227,11 @@ if __name__ == "__main__":
     plt.show()
     print(f"Le maximum d'énergie des sous produits Al27 est : {max(energie['Al27'])}")
     print(f"Le minimum d'énergie des sous produits Al27 est : {min(energie['Al27'])}") 
+    
+    
+    
+    
+    
+    
+    
+    

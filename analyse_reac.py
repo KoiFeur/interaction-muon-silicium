@@ -31,7 +31,8 @@ def reactiontype(reactions: list) -> list:
                     dic_abs[i.name] = 1
                 else:
                     dic_abs[i.name] += 1
-    return [nb_el, nb_inel, nb_abs], dic_el, dic_inel, dic_abs
+    dic_type_reac = {"Elastic":nb_el, "Inelastic":nb_inel, "Absorptions":nb_abs}
+    return dic_type_reac, dic_el, dic_inel, dic_abs
     
     
     
