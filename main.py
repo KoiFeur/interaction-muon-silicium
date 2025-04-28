@@ -27,32 +27,6 @@ Rappel des différents objectifs :
 
 
 
-#<<<<<<< HEAD
-if __name__ == "__main__":
-    try:
-        reactions = parser.parser("secondaries_500MeV.txt")
-    except IndexError:
-        print(bcolors.FAIL + "\nPlease put the name of the file here" + bcolors.ENDC)
-        print(bcolors.FAIL + "python3 main.py [file to analyse]\n" + bcolors.ENDC)
-    except FileNotFoundError:
-        print(bcolors.FAIL + "Couldn't find the file, you may had misspelled it." + bcolors.ENDC)
-        print(bcolors.FAIL + "python3 main.py [file to analyse]\n" + bcolors.ENDC)
-        
-    
-    
-    
-    
-    """
-    Objectif n°1 : compter le nombre de réactions et le type des 
-    réactions (élastiques, inélastiques, absorption)
-    """
-                                                                       
-    dic_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
-    print(dic_type_reac)
-    nb_el = dic_type_reac["Elastic"]
-    nb_inel = dic_type_reac["Inelastic"]
-    nb_abs = dic_type_reac["Absorptions"]
-#=======
 def main(file):
     reactions = parser.parser(file)
     if type(reactions) == type(1):
@@ -64,7 +38,6 @@ def main(file):
     nb_el = nb_type_reac[0]
     nb_inel = nb_type_reac[1]
     nb_abs = nb_type_reac[2]
-#>>>>>>> 359093acdf80176cc019690354c50ea9f79aaa85
     nb_total_reac = [nb_el, nb_inel, nb_abs]
     print("There are", nb_abs+nb_el+nb_inel, "reactions.")
     print("There are", nb_el, "elastic reactions/chocs,", nb_inel, "inelastic reactions/chocs, et", nb_abs, "absorptions.")
@@ -100,7 +73,6 @@ def main(file):
     print("There are", len(dic_sorted), "different kinds of sub-products.")
     print("Here are every types of sub-product and how often they appear :", dic_sorted)
     print("\n")
-    #limit = float(input("Please enter the limit of energy you are interested in (in eV):"))
     new_dic = {}
     for key, value in dic_sorted.items():
         if value > 1000:
@@ -122,17 +94,7 @@ def main(file):
     print("Here are the kind and number of each sub-product in elastic reactions :", dic_el)
     print("Here are the kind and number of each sub-product in inelastic reactions :", dic_inel)
     print("Here are the kind and number of each sub-product in absorptions :", dic_abs)
-        
-    
-#<<<<<<< HEAD
-
-
-
-#%%
     energie=analyse_reac.lvl_energie(reactions)
-
-       
-#=======
     new_dic = {}
     for key, value in dic_sorted.items():
         if value > 500:
@@ -287,8 +249,7 @@ def main(file):
 
 if __name__ == "__main__":
     liste = np.array(["secondaries_1GeV.txt", "secondaries_1MeV.txt", "secondaries_500MeV.txt"])
-    liste = ["testing_limit.txt"]
+    #liste = ["testing_limit.txt"]
     for i in liste:
         print(f"Executing file {i}")
         main(i)
-#>>>>>>> 359093acdf80176cc019690354c50ea9f79aaa85
