@@ -40,15 +40,18 @@ def main(file):
     print("There are", dic_type_reac["Elastic"], "elastic reactions/chocs,", dic_type_reac["Inelastic"], "inelastic reactions/chocs, and", dic_type_reac["Absorptions"], "absorptions.")
     
     
-    
     plt.bar(0, dic_type_reac["Elastic"], 1, label="Number of elastic reactions", color = "lightskyblue")
     plt.bar(1,  dic_type_reac["Inelastic"], 1, label="Number of inelastic reactions", color = "cornflowerblue")
-    plt.bar(2, dic_type_reac["Absorptions"], 1, label="Number of absorptions", color = "royalblue")    
+    plt.bar(2, dic_type_reac["Absorptions"], 1, label="Number of absorptions", color = "royalblue")  
+    q = 0
+    for key, value in dic_type_reac.items():
+        plt.text(q, value, value)
+        q += 1
     plt.xlabel("Reaction's type")
     plt.ylabel("Number of occurrences")
     plt.title("Reaction's histogram")
     plt.legend()
-    plt.xticks([])
+    plt.xticks([dic_type_reac["Elastic"], dic_type_reac["Inelastic"], dic_type_reac["Absorptions"]])
     plt.show()
     
     
