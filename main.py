@@ -34,28 +34,23 @@ def main(file):
         print(f"{bcolors.FAIL}Please read the error above or Debug the file{bcolors.ENDC}")
 
                                                                         #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
-    nb_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
-    nb_el = nb_type_reac[0]
-    nb_inel = nb_type_reac[1]
-    nb_abs = nb_type_reac[2]
-    nb_total_reac = [nb_el, nb_inel, nb_abs]
-    print("There are", nb_abs+nb_el+nb_inel, "reactions.")
-    print("There are", nb_el, "elastic reactions/chocs,", nb_inel, "inelastic reactions/chocs, et", nb_abs, "absorptions.")
+    dic_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
+    nb_total_reac = [dic_type_reac["Elastic"] + dic_type_reac["Inelastic"] + dic_type_reac["Absorptions"]]
+    print("There are", nb_total_reac, "reactions.")
+    print("There are", dic_type_reac["Elastic"], "elastic reactions/chocs,", dic_type_reac["Inelastic"], "inelastic reactions/chocs, and", dic_type_reac["Absorptions"], "absorptions.")
     
-    plt.bar(0, nb_el, 1, label="Number of elastic reactions", color = "lightskyblue")
-    plt.bar(1, nb_inel, 1, label="Number of inelastic reactions", color = "cornflowerblue")
-    plt.bar(2, nb_abs, 1, label="Number of absorptions", color = "royalblue")    
-    q = 0
-    for nbtypereac in nb_total_reac:
-        plt.text(q, nbtypereac, nbtypereac)
-        q += 1
+    
+    
+    plt.bar(0, dic_type_reac["Elastic"], 1, label="Number of elastic reactions", color = "lightskyblue")
+    plt.bar(1,  dic_type_reac["Inelastic"], 1, label="Number of inelastic reactions", color = "cornflowerblue")
+    plt.bar(2, dic_type_reac["Absorptions"], 1, label="Number of absorptions", color = "royalblue")    
     plt.xlabel("Reaction's type")
     plt.ylabel("Number of occurrences")
     plt.title("Reaction's histogram")
     plt.legend()
     plt.xticks([])
     plt.show()
-
+    
     
 
 

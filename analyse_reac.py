@@ -82,39 +82,3 @@ def lvl_energy(reactions: list) -> list:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            
-       
