@@ -12,21 +12,21 @@ def reactiontype(reactions: list) -> list:
     for reaction in reactions:
         if reaction.reaction_type == "Elastique":
             nb_el += 1
-            for i in reaction.sous_reactions:
+            for i in reaction.sub_products:
                 if i.name not in dic_el:
                     dic_el[i.name] = 1
                 else:
                     dic_el[i.name] += 1
         elif reaction.reaction_type == "Inelastique":
             nb_inel += 1
-            for i in reaction.sous_reactions:
+            for i in reaction.sub_products:
                 if i.name not in dic_inel:
                     dic_inel[i.name] = 1
                 else:
                     dic_inel[i.name] += 1
         elif reaction.reaction_type == "Absorption":
             nb_abs += 1
-            for i in reaction.sous_reactions:
+            for i in reaction.sub_products:
                 if i.name not in dic_abs:
                     dic_abs[i.name] = 1
                 else:
@@ -51,7 +51,7 @@ def nb_sub_product(reactions: list) -> int:
     "Used to determine the number of each kind of sub-product"
     dic = {}
     for reaction in reactions:
-        for i in reaction.sous_reactions:
+        for i in reaction.sub_products:
             if i.name not in dic:
                 dic[i.name] = 1
             else:
@@ -61,17 +61,17 @@ def nb_sub_product(reactions: list) -> int:
 
 
 
-def lvl_energie(reactions: list) -> list:
+def lvl_energy(reactions: list) -> list:
     "indicate the amount of energy for each sub product"
-    energie={}
+    energy={}
     
     for reaction in reactions:
-        for i in reaction.sous_reactions:
-            if i.name not in energie:
-                energie[i.name]=[i.energie]
+        for i in reaction.sub_products:
+            if i.name not in energy:
+                energy[i.name]=[i.energy]
             else:
-                energie[i.name].append(i.energie)
-    return energie            
+                energy[i.name].append(i.energy)
+    return energy            
     
     
 

@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 class Reaction:
-    def __init__(self, type_r, energie, nbr_sous_prod, vertex):
+    def __init__(self, type_r, energy, nbr_sous_prod, vertex):
         self.nbr_sous_prod = nbr_sous_prod
         self.vertex = vertex
         self.type_r = type_r
-        self.energie = energie
+        self.energy = energy
                           
         
         
