@@ -33,25 +33,36 @@ def main(file):
         print(f"{bcolors.FAIL}Error : reactions returned 1 exit status{bcolors.ENDC}")
         print(f"{bcolors.FAIL}Please read the error above or Debug the file{bcolors.ENDC}")
 
-                                                                        #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
+    
+
+
+    """
+    Objectif n°1 : Compter le nombre de réactions et le type des réactions 
+    (élastiques, inélastiques, absorption).
+    """                                                                    #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
     dic_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
     nb_total_reac = [dic_type_reac["Elastic"] + dic_type_reac["Inelastic"] + dic_type_reac["Absorptions"]]
     print("There are", nb_total_reac, "reactions.")
     print("There are", dic_type_reac["Elastic"], "elastic reactions/chocs,", dic_type_reac["Inelastic"], "inelastic reactions/chocs, and", dic_type_reac["Absorptions"], "absorptions.")
     
     
+    plt.figure()
+    plt.bar(range(len(dic_type_reac.values())), dic_type_reac.values(), 1)
+   
+    """
     plt.bar(0, dic_type_reac["Elastic"], 1, label="Number of elastic reactions", color = "lightskyblue")
     plt.bar(1,  dic_type_reac["Inelastic"], 1, label="Number of inelastic reactions", color = "cornflowerblue")
     plt.bar(2, dic_type_reac["Absorptions"], 1, label="Number of absorptions", color = "royalblue")  
-    q = 0
+    """
+    q = range(3)
     for key, value in dic_type_reac.items():
         plt.text(q, value, value)
-        q += 1
+    plt.text(range(1,len(dic_type_reac.values())+1), dic_type_reac.values(), dic_type_reac.values())
     plt.xlabel("Reaction's type")
     plt.ylabel("Number of occurrences")
     plt.title("Reaction's histogram")
     plt.legend()
-    plt.xticks([dic_type_reac["Elastic"], dic_type_reac["Inelastic"], dic_type_reac["Absorptions"]])
+    plt.xticks([])
     plt.show()
     
     

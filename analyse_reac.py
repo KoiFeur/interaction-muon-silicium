@@ -64,7 +64,6 @@ def nb_sub_product(reactions: list) -> int:
 def lvl_energy(reactions: list) -> list:
     "indicate the amount of energy for each sub product"
     energy={}
-    
     for reaction in reactions:
         for i in reaction.sub_products:
             if i.name not in energy:
