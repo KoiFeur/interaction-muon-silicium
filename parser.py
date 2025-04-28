@@ -8,13 +8,13 @@ class Vecteur:
     Parameters:
 
     x: float
-        x compenent
+        x component 
 
     y: float
-        y compenent
+        y component
 
     z: float
-        z compenent
+        z component
     """
     def __init__(self, x, y, z):
         self.x: float = x
