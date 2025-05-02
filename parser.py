@@ -1,6 +1,9 @@
 import time
+from colors import bcolors
 from tqdm import tqdm
 import numpy as np
+import re
+import traceback
 
 class Vecteur:
     """
@@ -93,21 +96,25 @@ class Reaction:
         self.reaction_type: str = self.__get_reaction_type(self.eq_reac)
         self.nb_sous_reactifs: int = len(self.sub_products)
 
-
-
 def parser(file: str) -> tuple[np.ndarray, int]:
     """parse things"""
     print("\n Openning file : \n")
-    start = time.time_ns()
-
     liste=[""] #else there is out of range error due tu the liste[-1]+=line line
+    start = time.time_ns()
     try:
         f = open(file, "r")
-        data = f.read().split("\n")
+        data = f.read()
         f.close()
+        if re.search(r"[^ -~\n]", data) != None:
+            print(f"\n{bcolors.FAIL}Non ASCII character detected {bcolors.ENDC}")
+            return (np.array(liste), -2)
+        data = data.split('\n')
+    except FileNotFoundError:
+        print(f"{bcolors.FAIL}{file} : No such a directory file{bcolors.ENDC}")
+        return (np.array(liste), -1)
     except:
-        print("can't open the file")
-        return (np.array(liste), 1)
+        print(f"{bcolors.FAIL}Can't open file{bcolors.ENDC}")
+        return (np.array(liste), -1)
     stop = time.time_ns()
 
     print(f"File read in {stop - start} ns ({round((stop - start) * 1e-9, 2)} s)")
@@ -122,12 +129,16 @@ def parser(file: str) -> tuple[np.ndarray, int]:
             liste.append(line[:-2] + f" {i + 1}\n") #add each reaction line
         else:
             liste[-1]+=line     
+        
+    if len(liste) == 1 :
+        print("File contain one or less reaction")
+        return (np.array(liste), -2)
 
     print("\nObject list creation :")
     
     reactions = []
     for id in tqdm(range(1, len(liste))):
-        i = liste[id] # I know this is weird and useless but it's like that to keep the beautiful progress bar
+        i = liste[id] # I know this is weird and useless but it's to keep the beautiful progress bar
         v = [[a for a in j.split(" ") if a != ""] for j in i.split("\n") if j != ""] #split
         
         try:
@@ -141,11 +152,12 @@ def parser(file: str) -> tuple[np.ndarray, int]:
             for i in v[2:]:
                 sub_products.append(Sub_product(i[0], float(i[1]), Vecteur(i[2], i[3], i[4])))
         except IndexError:
-            print(IndexError)
+            print(f"{bcolors.FAIL}Can't parse the {id}th reaction. Something is missing.{bcolors.ENDC}")
             return (np.array(reactions), -2)
-        
+        except ValueError:
+            print(f"{bcolors.FAIL}Can't parse the {id}th reaction. Can't convert things into float.{bcolors.ENDC}")
+            return (np.array(reactions), -2)
         
         reactions.append(Reaction(energy, in_vec, sub_products, eq_reac, id, num_line))
     print("\n")
-    #return reactions
     return np.array(reactions), 0

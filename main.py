@@ -231,7 +231,6 @@ def main(file):
 if __name__ == "__main__":
     liste = np.array(["secondaries_1GeV.txt", "secondaries_1MeV.txt", "secondaries_500MeV.txt"])
     #liste = ["testing_limit.txt"]
-    liste = ["jpn.txt"]
     for i in liste:
         print(f"Executing file {i}")
         code_return = main(i)
