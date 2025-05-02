@@ -1,13 +1,8 @@
 import parser
-import sys
 from colors import bcolors
-import pandas as pd
 import matplotlib.pyplot as plt
 import analyse_reac
 import numpy as np
-
-from matplotlib import colors
-from matplotlib.ticker import PercentFormatter
 
 
 
@@ -28,16 +23,20 @@ Rappel des différents objectifs :
 
 
 def main(file):
-    reactions = parser.parser(file)
-    if type(reactions) == type(1):
+    reactions, code_return = parser.parser(file)
+    if code_return == -1:
         print(f"{bcolors.FAIL}Error : reactions returned 1 exit status{bcolors.ENDC}")
         print(f"{bcolors.FAIL}Please read the error above or Debug the file{bcolors.ENDC}")
-
-                                                                        #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
+        return code_return
+    if code_return == -2:
+        print(f"{bcolors.FAIL}Error : reactions return 2 exit status")
+        print(f"Wrong file type. Please input a correct file type.{bcolors.ENDC}")
+        return code_return
+    #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
     nb_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
-    nb_el = nb_type_reac[0]
-    nb_inel = nb_type_reac[1]
-    nb_abs = nb_type_reac[2]
+    nb_el = nb_type_reac["Elastic"]
+    nb_inel = nb_type_reac["Inelastic"]
+    nb_abs = nb_type_reac["Absorptions"]
     nb_total_reac = [nb_el, nb_inel, nb_abs]
     print("There are", nb_abs+nb_el+nb_inel, "reactions.")
     print("There are", nb_el, "elastic reactions/chocs,", nb_inel, "inelastic reactions/chocs, et", nb_abs, "absorptions.")
@@ -55,10 +54,6 @@ def main(file):
     plt.legend()
     plt.xticks([])
     plt.show()
-
-    
-
-
 
     print("\n")
     """
@@ -94,7 +89,7 @@ def main(file):
     print("Here are the kind and number of each sub-product in elastic reactions :", dic_el)
     print("Here are the kind and number of each sub-product in inelastic reactions :", dic_inel)
     print("Here are the kind and number of each sub-product in absorptions :", dic_abs)
-    energie=analyse_reac.lvl_energie(reactions)
+    energie=analyse_reac.lvl_energy(reactions)
     new_dic = {}
     for key, value in dic_sorted.items():
         if value > 500:
@@ -109,16 +104,12 @@ def main(file):
     plt.title("Type et quantité de chaque sous-produit")
     plt.xticks(rotation=90)
     plt.show()
-    
-
-
     energy=analyse_reac.lvl_energy(reactions)
 
-
+    return 0
     #j'ai juré va falloir tout changer ça là ya du rouge partout chez moi ça casse la tête
     #+ ya explicitement marqué dans le truc qu'il y a obligation de ne pas utiliser du hard coding
     """
->>>>>>> 359093acdf80176cc019690354c50ea9f79aaa85
     energy_rangesNe = [(0, 50), (50, 100), (100, 150), (150, 200), (200, 250), (250, 300), (300, 350), (350, 400), (400, 450), (450, 500)]
     nb_srNe=[i for i in range(len(energy_rangesNe))]
     barresNe = [0] * len(energy_rangesNe)
@@ -227,18 +218,8 @@ def main(file):
     plt.xticks(rotation=90)
     plt.title("energys des sous produits Al27")
     plt.show()
-<<<<<<< HEAD
     print(f"Le maximum d'énergie des sous produits Al27 est : {max(energie['Al27'])}")
     print(f"Le minimum d'énergie des sous produits Al27 est : {min(energie['Al27'])}") 
-    
-    
-    
-    
-    
-    
-    
-    
-=======
     print(f"Le maximum d'énergie des sous produits Al27 est : {max(energy['Al27'])}")
     print(f"Le minimum d'énergie des sous produits Al27 est : {min(energy['Al27'])}") 
     """
@@ -250,6 +231,11 @@ def main(file):
 if __name__ == "__main__":
     liste = np.array(["secondaries_1GeV.txt", "secondaries_1MeV.txt", "secondaries_500MeV.txt"])
     #liste = ["testing_limit.txt"]
+    liste = ["jpn.txt"]
     for i in liste:
         print(f"Executing file {i}")
-        main(i)
+        code_return = main(i)
+        if code_return != 0:
+            print(f"\n\n{bcolors.FAIL} Can't process file correctly, continuing{bcolors.ENDC}")
+            continue
+        print("file processed correctly")
