@@ -1,6 +1,6 @@
 import numpy as np
-
-
+ 
+ 
 def reactiontype(reactions: list) -> list: 
     "Used to determined what's the reaction's type."
     nb_el = 0
@@ -33,10 +33,10 @@ def reactiontype(reactions: list) -> list:
                     dic_abs[i.name] += 1
     dic_type_reac = {"Elastic":nb_el, "Inelastic":nb_inel, "Absorptions":nb_abs}
     return dic_type_reac, dic_el, dic_inel, dic_abs
-    
-    
-    
-    
+
+
+
+
 def nb_sous_prod_tot(reactions: list) -> int:
     "Used to determine the number of sub-products in the entire file"
     nb_sous_prod_tot = 0
@@ -64,6 +64,7 @@ def nb_sub_product(reactions: list) -> int:
 def lvl_energy(reactions: list) -> list:
     "indicate the amount of energy for each sub product"
     energy={}
+    
     for reaction in reactions:
         for i in reaction.sub_products:
             if i.name not in energy:
@@ -71,13 +72,3 @@ def lvl_energy(reactions: list) -> list:
             else:
                 energy[i.name].append(i.energy)
     return energy            
-    
-    
-
-
-
-
-
-
-
-
