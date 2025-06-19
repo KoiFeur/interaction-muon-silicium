@@ -1,2 +1,5 @@
 __pycache__
-./.spyproject/*
+./.spyproject/
+Secondaries_zips/
+.venv/
+media/

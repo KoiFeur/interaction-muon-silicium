@@ -1,135 +1,129 @@
+import os
+import sys
+sys.path.append("/run/media/n/feur/feur/biboubiboup/lepython/interaction_muon_silicium/")
 import parser
-from colors import bcolors
 import matplotlib.pyplot as plt
-import analyse_reac
 import numpy as np
+from manim import *
+from manim.opengl import *
+from tqdm import tqdm 
+np.set_printoptions(threshold=sys.maxsize)
+
+c = 299792458
+h = 6.62607015e-34
+eV = 1.602176634e-19
+
+MASSES = {
+    "proton" : 	1.67262192595e-27,
+    "neutron" : 1.67492750056e-27,
+    "pi-" : 139.57018 * eV * (c**2),
+    "pi+" : 139.57018 * eV * (c**2),
+    "pi0" : 134.9766 * eV * (c**2),
+    "alpha": 6.644657230e-27,
+}
+MASSES["He6"] = 2*MASSES["proton"] + 4*MASSES["neutron"]
+MASSES["Si28"] = 14 * MASSES["proton"] + (28-14)*MASSES["neutron"]
+MASSES["Si29"] = 14 * MASSES["proton"] + (29-14)*MASSES["neutron"]
+MASSES["Si27"] = 14 * MASSES["proton"] + (27-14)*MASSES["neutron"]
+MASSES["Al27"] = 13 * MASSES["proton"] + (27-13)*MASSES["neutron"]
 
 
+def concatenate(data):
+    temp = []
+    for i in data:
+        temp = temp + i
+    return temp
 
-"""
-Rappel des différents objectifs :
-    - Compter le nombre de réactions et le type des réactions (élastiques, inélastiques, absorption).
-    Etat : fait, peut-être "améliorer" le code ?
-    
-    - Compter le nombre et le type de produits secondaires (gamma, protons, Mg25, Si28,….) produits par
-    types de réactions et au total – Représenter graphiquement les résultats.
-    Etat : nbr de sous produits total fait, pas le reste.
-    
-    - Tracer les histogrammes en énergie des produits secondaires par type de produits.
-    
-    
-"""
-
-
-
-def main(file):
-    reactions, code_return = parser.parser(file)
-    if code_return == -1:
-        print(f"{bcolors.FAIL}Error : reactions returned 1 exit status{bcolors.ENDC}")
-        print(f"{bcolors.FAIL}Please read the error above or Debug the file{bcolors.ENDC}")
-    """
-    Objectif n°1 : Compter le nombre de réactions et le type des réactions 
-    (élastiques, inélastiques, absorption).
-    """                                                                    #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
-    dic_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
-    nb_total_reac = [dic_type_reac["Elastic"] + dic_type_reac["Inelastic"] + dic_type_reac["Absorptions"]]
-    print("There are", nb_total_reac, "reactions.")
-    print("There are", dic_type_reac["Elastic"], "elastic reactions/chocs,", dic_type_reac["Inelastic"], "inelastic reactions/chocs, and", dic_type_reac["Absorptions"], "absorptions.")
-    
-    
-    plt.figure()
-    plt.bar(range(len(dic_type_reac.values())), dic_type_reac.values(), 1)
-   
-    q = range(3)
-    for key, value in dic_type_reac.items():
-        plt.text(q, value, value)
-    plt.text(range(1,len(dic_type_reac.values())+1), dic_type_reac.values(), dic_type_reac.values())
-        return code_return
-    if code_return == -2:
-        print(f"{bcolors.FAIL}Error : reactions return 2 exit status")
-        print(f"Wrong file type. Please input a correct file type.{bcolors.ENDC}")
-        return code_return
-    #Dans cette section, on récupère et print le nbr de réactions el, inel et abs.
-    nb_type_reac, dic_el, dic_inel, dic_abs = analyse_reac.reactiontype(reactions)
-    nb_el = nb_type_reac["Elastic"]
-    nb_inel = nb_type_reac["Inelastic"]
-    nb_abs = nb_type_reac["Absorptions"]
-    nb_total_reac = [nb_el, nb_inel, nb_abs]
-    print("There are", nb_abs+nb_el+nb_inel, "reactions.")
-    print("There are", nb_el, "elastic reactions/chocs,", nb_inel, "inelastic reactions/chocs, et", nb_abs, "absorptions.")
-    
-    plt.bar(0, nb_el, 1, label="Number of elastic reactions", color = "lightskyblue")
-    plt.bar(1, nb_inel, 1, label="Number of inelastic reactions", color = "cornflowerblue")
-    plt.bar(2, nb_abs, 1, label="Number of absorptions", color = "royalblue")    
-    q = 0
-    for nbtypereac in nb_total_reac:
-        plt.text(q, nbtypereac, nbtypereac)
-        q += 1
-
-    plt.xlabel("Reaction's type")
-    plt.ylabel("Number of occurrences")
-    plt.title("Reaction's histogram")
-    plt.legend()
-    plt.xticks([])
+def ploting_hist(names, titles, content, dims, fig_dims, lims = None, colors = None):
+    plt.figure(figsize=fig_dims, dpi=100)
+    if colors == None:
+        colors = ["blue"] * len(titles)
+    for i in range(len(titles)):
+        plt.subplot(dims[0], dims[1], i+1)
+        plt.tight_layout()
+        plt.bar(range(len(names[i])), content[i], tick_label = names[i], color = colors[i])
+        plt.xticks(rotation = 90)
+        plt.title(titles[i])
+        if lims != None:
+            plt.ylim(lims[0], lims[1])
     plt.show()
 
-    print("\n")
     
-    tot_nb_sub_prod = analyse_reac.nb_sous_prod_tot(reactions)
-    dic_sorted = analyse_reac.nb_sub_product(reactions)
-    print("There is a total of", tot_nb_sub_prod, "sub-products created.")
-    print("There are", len(dic_sorted), "different kinds of sub-products.")
-    print("Here are every types of sub-product and how often they appear :", dic_sorted)
-    print("\n")
-    new_dic = {}
-    for key, value in dic_sorted.items():
-        if value > 1000:
-            new_dic[key] = value
-        else:
-            continue
-    
-    k = 0
-    for key, value in new_dic.items():
-        plt.bar(k+0.5, value, 1, label=key)
-        plt.text(k, value, value)
-        k += 1
-    plt.yscale('log')
-    plt.grid()
-    plt.title("Type et quantité de chaque sous-produit")
-    plt.xticks([])
-    plt.show()
-    
-    print("Here are the kind and number of each sub-product in elastic reactions :", dic_el)
-    print("Here are the kind and number of each sub-product in inelastic reactions :", dic_inel)
-    print("Here are the kind and number of each sub-product in absorptions :", dic_abs)
-    energie=analyse_reac.lvl_energy(reactions)
-    new_dic = {}
-    for key, value in dic_sorted.items():
-        if value > 500:
-            new_dic[key] = value
-        else:
-            continue
+
+
+class Collision(ThreeDScene):
+    def create_product(self, sub_product: parser.Sub_product, starting_point):
+        if sub_product.name != "gamma":
             
-    print(new_dic)
-    
-    plt.barh(range(len(new_dic)), new_dic.values(), 0.5, tick_label=list(new_dic.keys()))
-    plt.yscale('log')
-    plt.title("Type et quantité de chaque sous-produit")
-    plt.xticks(rotation=90)
-    plt.show()
-    energy=analyse_reac.lvl_energy(reactions)
-    return 0
+
+
+    def construct(self):
+        liste = os.listdir("Secondaries_zips")
+        liste = ["Secondaries_zips/" + i for i in liste if "txt" in i][13:16]
+        files = parser.open_multiple_files(liste)
+        
+        self.create_product(files[0].content[0].sub_products[0], "")
+
+        
+
+        self.move_camera(phi = 75 * DEGREES, theta = 30 * DEGREES)
+        axes = ThreeDAxes(
+            x_range=(-1, 1, 0.2),
+            y_range=(-1, 1, 0.2),
+            z_range=(-1, 1, 0.2),
+
+        )
+        sphere1 = Sphere(
+            center = (0.5,0.5,0.5),
+            resolution=(16,16)
+        )
+
+
+
+        self.renderer.camera.light_source.move_to((5,5,5)) # changes the source of the light
+        self.play(Create(sphere1))
+
+        text = Text("").to_corner(UL)
+
+        self.add_fixed_in_frame_mobjects(text)
+
+        text.text = "Silicium"
+
+        self.play(Create(text))
+
+
+
+        """
+        point = axes.coords_to_point(files[0].galette[0][0], files[0].galette[0][1], files[0].galette[0][2])
+
+        
+        self.wait(3)
+        dot = Sphere(
+            center=point,
+            radius=0.1,
+            resolution=(8,8)
+        )
+
+
+        self.play(TransformMatchingShapes(sphere1, dot), Create(axes))     
+
+        
+        sphere_temp = [Create(Sphere(
+            center=axes.coords_to_point(i[0], i[1], i[2]),
+            radius=0.1, 
+            color = BLUE,
+            resolution=(2,2)
+        ).set_color(BLUE)) for i in tqdm(files[0].galette[:500])]
+        self.play(*sphere_temp)
+        self.remove(sphere1, dot)
+
+
+        self.move_camera(phi = 75 * DEGREES, theta = (30-180) * DEGREES)
+        """
+        self.wait(3)
+        self.interactive_embed()
 
 
 
 
-if __name__ == "__main__":
-    liste = np.array(["secondaries_1GeV.txt", "secondaries_1MeV.txt", "secondaries_500MeV.txt"])
-    #liste = ["testing_limit.txt"]
-    for i in liste:
-        print(f"Executing file {i}")
-        code_return = main(i)
-        if code_return != 0:
-            print(f"\n\n{bcolors.FAIL} Can't process file correctly, continuing{bcolors.ENDC}")
-            continue
-        print("file processed correctly")
+
