@@ -12,21 +12,7 @@ np.set_printoptions(threshold=sys.maxsize)
 c = 299792458
 h = 6.62607015e-34
 eV = 1.602176634e-19
-
-MASSES = {
-    "proton" : 	1.67262192595e-27,
-    "neutron" : 1.67492750056e-27,
-    "pi-" : 139.57018 * eV * (c**2),
-    "pi+" : 139.57018 * eV * (c**2),
-    "pi0" : 134.9766 * eV * (c**2),
-    "alpha": 6.644657230e-27,
-}
-MASSES["He6"] = 2*MASSES["proton"] + 4*MASSES["neutron"]
-MASSES["Si28"] = 14 * MASSES["proton"] + (28-14)*MASSES["neutron"]
-MASSES["Si29"] = 14 * MASSES["proton"] + (29-14)*MASSES["neutron"]
-MASSES["Si27"] = 14 * MASSES["proton"] + (27-14)*MASSES["neutron"]
-MASSES["Al27"] = 13 * MASSES["proton"] + (27-13)*MASSES["neutron"]
-
+AMU = 931.5 * c**2 # MeV/c**2
 
 def concatenate(data):
     temp = []
@@ -52,17 +38,29 @@ def ploting_hist(names, titles, content, dims, fig_dims, lims = None, colors = N
 
 
 class Collision(ThreeDScene):
-    def create_product(self, sub_product: parser.Sub_product, starting_point):
+    def create_product(self, sub_product: parser.Sub_product, starting_point: np.ndarray, duration_time: float, radius: float):
         if sub_product.name != "gamma":
-            
-
+            beta2 = v2/(c**2)
+            print(MASSES[sub_product.name] * c**2 / np.sqrt(1 - beta2) )
+            print((1/2) * MASSES[sub_product.name] * v2, sub_product.energy * eV)
+            print((1/2) * MASSES[sub_product.name] * v2 / sub_product.energy * eV)
+            #color = sub_product.color
+            #v = np.sqrt(2 * sub_product.energy * eV / MASSES[sub_product.name])
+            ending_point = starting_point + sub_product.vecteur * v * duration_time
+            sphere = Sphere(
+                center=starting_point,
+                radius=radius,
+                color = color
+            )
+            self.add(sphere)
+            sphere.animate(run_time=duration_time).move_to(ending_point)
 
     def construct(self):
         liste = os.listdir("Secondaries_zips")
         liste = ["Secondaries_zips/" + i for i in liste if "txt" in i][13:16]
         files = parser.open_multiple_files(liste)
         
-        self.create_product(files[0].content[0].sub_products[0], "")
+        #self.create_product(files[0].content[0].sub_products[0], "", "", "")
 
         
 
@@ -93,7 +91,7 @@ class Collision(ThreeDScene):
 
 
 
-        """
+        
         point = axes.coords_to_point(files[0].galette[0][0], files[0].galette[0][1], files[0].galette[0][2])
 
         
@@ -108,18 +106,18 @@ class Collision(ThreeDScene):
         self.play(TransformMatchingShapes(sphere1, dot), Create(axes))     
 
         
-        sphere_temp = [Create(Sphere(
+        sphere_group = VGroup([Sphere(
             center=axes.coords_to_point(i[0], i[1], i[2]),
             radius=0.1, 
             color = BLUE,
-            resolution=(2,2)
-        ).set_color(BLUE)) for i in tqdm(files[0].galette[:500])]
-        self.play(*sphere_temp)
+            resolution=(4,4)
+        ).set_color(BLUE) for i in tqdm(files[0].galette[:1000])])
+        self.play(Create(sphere_group))
         self.remove(sphere1, dot)
 
 
         self.move_camera(phi = 75 * DEGREES, theta = (30-180) * DEGREES)
-        """
+        
         self.wait(3)
         self.interactive_embed()
 

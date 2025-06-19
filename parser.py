@@ -1,9 +1,126 @@
+from os import walk
 from colors import bcolors
 from tqdm import tqdm
 import numpy as np
 import re
 import sys
+from manim import *
 np.set_printoptions(threshold=sys.maxsize)
+
+AMU = 931.5 # MeV/c**2
+
+ATOMS = {
+    "e-" : {"mass" : 0.51099895069, "color" : GOLD_E, "radius" : 0.1},
+    "xi-" : {"mass" : 1314.86, "color" : ORANGE, "radius" : 0.1},
+    "xi0" : {"mass" : 1321.71, "color" : ORANGE, "radius" : 0.1},
+    "pi-" : {"mass" : 139.57018, "color" : YELLOW, "radius" : 0.1},
+    "pi+" : {"mass" : 139.57018, "color" : YELLOW, "radius" : 0.1},
+    "pi0" : {"mass" : 134.9766, "color" : YELLOW, "radius" : 0.1},
+    "kaon0S" : {"mass" : 497.611, "color" : GOLD_A, "radius" : 0.1},
+    "kaon0L" : {"mass" : 497.611, "color" : GOLD_A, "radius" : 0.1},
+    "kaon+" : {"mass" : 493.677, "color" : GOLD_A, "radius" : 0.1},
+    "kaon-" : {"mass" : 493.677, "color" : GOLD_A, "radius" : 0.1},
+    "sigma+" : {"mass" : 1189.37, "color" : BLUE_A, "radius" : 0.1},
+    "sigma-" : {"mass" : 1197.449, "color" : BLUE_A, "radius" : 0.1},
+    "sigma0" : {"mass" : 1192.642, "color" : BLUE_A, "radius" : 0.1},
+    "eta" : {"mass" : 547.862, "color" : GREEN_E, "radius" : 0.1},
+    "eta_prime" : {"mass" : 957.78, "color" : GREEN_D, "radius" : 0.1},
+    "lambda" : {"mass" : 1115.683, "color" : LIGHT_BROWN, "radius" : 0.1},
+    "neutron" : {"mass" : 939.565422, "color" : GREEN, "radius" : 0.2},
+    "proton" : {"mass" : 938.272089, "color" : WHITE, "radius" : 0.2},
+    "deuteron" : {"mass" : 2.01410177812 * AMU, "color" : LIGHTER_GRAY, "radius" : 0.2},
+    "triton" : {"mass" : 3.0160492779 * AMU, "color" : LIGHT_GRAY, "radius" : 0.2},
+    "H4" : {"mass" : 4.02643 * AMU, "color" : GRAY_B, "radius" : 0.2},
+    "alpha": {"mass" : 3.726379e3, "color" : BLUE_B, "radius" : 0.3},
+    "He3" : {"mass" : 3.0160293201 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He4" : {"mass" : 4.00260325413 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He6" : {"mass" : 6.0188891 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He7" : {"mass" : 7.028021 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He8" : {"mass" : 8.033922 * AMU, "color" : TEAL, "radius" : 0.3},
+    "Li4" : {"mass" : 4.02719 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li5" : {"mass" : 5.01254 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li6" : {"mass" : 6.0151228874 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li7" : {"mass" : 7.0160034366 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li8" : {"mass" : 8.02248736 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li9" : {"mass" : 9.0267895 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Be6" : {"mass" : 6.019726 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be7" : {"mass" : 7.01692983 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be8" : {"mass" : 8.00530510 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be9" : {"mass" : 9.012183065 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be10" : {"mass" : 10.0135338 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be11" : {"mass" : 11.021658 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be12" : {"mass" : 12.026921 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "B8" : {"mass" : 8.0246072 * AMU, "color" : MAROON_E, "radius" : 0.3},
+    "B9" : {"mass" : 9.0133288 * AMU, "color" : MAROON_E, "radius" : 0.3},
+    "B10" : {"mass" : 10.01293695 * AMU, "color" : MAROON_E, "radius" : 0.4},
+    "B11" : {"mass" : 11.00930536 * AMU, "color" : MAROON_E, "radius" : 0.4},
+    "B12" : {"mass" : 12.0143521 * AMU, "color" : MAROON_E, "radius" : 0.4},
+    "B13" : {"mass" : 13.0177802 * AMU, "color" : MAROON_E, "radius" : 0.4},
+    "C10" : {"mass" : 10.0168532 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C11" : {"mass" : 11.0114336 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C12" : {"mass" : 12 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C13" : {"mass" : 13.00335483507 * AMU, "color" : DARKER_GRAY, "radius" : 0.4},
+    "C14" : {"mass" : 14.0032419884 * AMU, "color" : LOGO_BLACK, "radius" : 0.4},
+    "N11" : {"mass" : 11.02609 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N12" : {"mass" : 12.0186132 * AMU, "color" :   PURE_BLUE, "radius" : 0.4},
+    "N13" : {"mass" : 13.00573861 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N14" : {"mass" : 14.00307400443 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N15" : {"mass" : 15.00010889888 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N16" : {"mass" : 16.0061017 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N17" : {"mass" : 17.008450 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "O14" : {"mass" : 19.003580 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O15" : {"mass" : 15.0030656 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O16" : {"mass" : 15.99491461957 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O17" : {"mass" : 16.99913175650 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O18" : {"mass" : 17.99915961286 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O19" : {"mass" : 19.003580 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O20" : {"mass" : 20.0040767 *  AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O21" : {"mass" : 21.008656 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "F15" : {"mass" : 15.01801 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F16" : {"mass" : 16.011466 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F17" : {"mass" : 17.00209524 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F18" : {"mass" : 18.0009380 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F19" : {"mass" : 18.99840316273 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F20" : {"mass" : 19.99998132 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F21" : {"mass" : 20.9999490 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F22" : {"mass" : 22.002999 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "Ne18" : {"mass" : 18.0057082 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "Ne19" : {"mass" : 19.0018802 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne20" : {"mass" : 19.9924401762 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne21" : {"mass" : 20.993846685 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne22" : {"mass" : 21.991385114 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne23" : {"mass" : 22.99446690 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne24" : {"mass" : 23.9936108 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Na21" : {"mass" : 20.9976552 * AMU, "color" : LOGO_BLUE, "radius" : 0.4},
+    "Na22" : {"mass" : 21.9944364 * AMU, "color" : LOGO_BLUE, "radius" : 0.4},
+    "Na23" : {"mass" : 22.9897692820 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
+    "Na24" : {"mass" : 23.99096278 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
+    "Na25" : {"mass" : 24.9899540 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
+    "Na26" : {"mass" : 25.992633 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
+    "Na27" : {"mass" : 26.994077 * AMU, "color" : LOGO_BLUE, "radius": 0.5},
+    "Mg21" : {"mass" : 21.011713 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg22" : {"mass" : 21.9995738 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg23" : {"mass" : 22.9941237 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg24" : {"mass" : 23.985041697 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg25" : {"mass" : 24.985836976 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg26" : {"mass" : 25.982592968 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg27" : {"mass" : 26.98434059 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg28" : {"mass" : 27.9838768 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Al24" : {"mass" : 23.99994760 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al25" : {"mass" : 24.990428308 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al26" : {"mass" : 25.98689169 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al27" : {"mass" : 26.98153853 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al28" : {"mass" : 27.981910009 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al29" : {"mass" : 28.98045316 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al30" : {"mass" : 29.9829692 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Si26" : {"mass" : 25.992330 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si27" : {"mass" : 26.98670491 * AMU, "color" : PURPLE_B, "radius" : 0.5},
+    "Si28" : {"mass" : 27.97692653465 * AMU, "color" : PURPLE_C, "radius" : 0.5},
+    "Si29" : {"mass" : 28.97649466490 * AMU, "color" : PURPLE_D, "radius" : 0.5},
+    "Si30" : {"mass" : 29.973770136 * AMU, "color" : PURPLE_E, "radius" : 0.5},
+    "P27" : {"mass" : 26.999230 *AMU, "color" : TEAL_E, "radius" : 0.5},
+    "P28" : {"mass" : 27.992315 * AMU, "color" : TEAL_E, "radius" : 0.5},
+}
 
 class Fichier:
     def __str__(self):
@@ -147,6 +264,19 @@ class Sub_product:
         self.name: str = name
         self.energy: float = energy
         self.vecteur: np.ndarray = vec
+        if self.name != "gamma":
+            if "anti_" in self.name:
+                self.name = self.name.split("_")[1]
+            self.mass: float = ATOMS[self.name]["mass"]
+            self.color: ManimColor = ATOMS[self.name]["color"]
+            self.radius: float = ATOMS[self.name]["radius"]
+        else:
+            self.color: ManimColor = YELLOW_E
+            self.radius: float = 0.1
+            self.mass = 0
+        self.norm: float = np.sqrt(vec[0]**2 + vec[1]**2 + vec[2]**2)
+        self.vecteur /= self.norm
+        self.norm: float = np.sqrt(vec[0]**2 + vec[1]**2 + vec[2]**2)
 
 class Reaction: 
     def __get_reac(self) -> list: 
@@ -235,7 +365,7 @@ def parser(file: str) -> tuple[np.ndarray, int, int]:
 
         eq_reac = v[0][2:]
         eq_reac = eq_reac[:-1]
-        sub_products = [Sub_product(i[0], float(i[1]), np.array([i[2], i[3], i[4]])) for i in v[2:]]
+        sub_products = [Sub_product(i[0], float(i[1]), np.array([float(i[2]), float(i[3]), float(i[4])])) for i in v[2:]]
         reactions.append(Reaction(in_vec, sub_products, eq_reac))
 
     del(liste)
