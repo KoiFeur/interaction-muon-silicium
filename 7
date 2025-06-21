@@ -46,98 +46,63 @@ class Collision(ThreeDScene):
         ]),
 
     def create_product(self, axes, sub_product: parser.Sub_product, starting_point: np.ndarray, duration_time: float):
-        r = parser.ATOMS[sub_product.name]["radius"] * 1.5
         if sub_product.name != "gamma":
             v = np.sqrt(1 - (1/((sub_product.energy/parser.ATOMS[sub_product.name]["mass"]) + 1))) * c
+            r = parser.ATOMS[sub_product.name]["radius"]
             #color = sub_product.color
             #v = np.sqrt(2 * sub_product.energy * eV / MASSES[sub_product.name])
-            ending_point = axes.coords_to_point(starting_point + sub_product.vecteur * v * duration_time)[0]
-            starting_sphere = Sphere(
-                center=axes.coords_to_point(starting_point)[0],
-                radius=r,
-                resolution = (8, 8),
-                stroke_width = np.array([0.1])
+            ending_point = starting_point + sub_product.vecteur * v * duration_time
+            starting_sphere = OpenGLSurface(
+                uv_func=lambda u,v : axes.coords_to_point(*self.spheres(u, v, r, starting_point)),
+                u_range= [0, 2*PI],
+                v_range= [-PI, PI],
+                resolution = (16, 16),
+                dim = 3,
             ).set_color(parser.ATOMS[sub_product.name]["color"])
             if "C" in sub_product.name:
                 starting_sphere.stroke_color = ManimColor.from_hex("#FFFFFF")
             else:
                 starting_sphere.stroke_color = BLACK
             return starting_sphere, ending_point
-        ending_point = axes.coords_to_point(starting_point + sub_product.vecteur * c * duration_time)[0]
+        ending_point = starting_point + sub_product.vecteur * c * duration_time
         starting_sphere = Sphere(
-            center=axes.coords_to_point(starting_point)[0],
-            radius=r,
-            resolution = (8, 8),
-            stroke_width = np.array([0.1])
+            center=starting_point,
+            radius=parser.ATOMS[sub_product.name]["radius"],
+            resolution = (16, 8),
         ).set_color(parser.ATOMS[sub_product.name]["color"])
         starting_sphere.stroke_color = BLACK
         return starting_sphere, ending_point
 
-    def create_in_neutron(self, collision_point, energy, duration_time, axes):
-        v = np.sqrt(1 - (1/((energy/parser.ATOMS["neutron"]["mass"]) + 1))) * c
-        r = parser.ATOMS["neutron"]["radius"] * 1.5
-        starting_point = axes.coords_to_point(collision_point + np.array([0, 0, 1]) * v * duration_time)[0]
-        print(starting_point)
-        neutron = Sphere(
-            center = starting_point,
-            radius = r,
-            resolution = (8,8),
-            stroke_width = np.array([0.1])
-        ).set_color(parser.ATOMS["neutron"]["color"])
-        neutron.stroke_color = BLACK
-        return neutron
 
     def construct(self):
         liste = os.listdir("Secondaries_zips")
-        liste = ["Secondaries_zips/" + i for i in liste if "txt" in i][28:29]
-        print(liste)
+        liste = ["Secondaries_zips/" + i for i in liste if "txt" in i][13:15]
         files = parser.open_multiple_files(liste)
         
         axes = ThreeDAxes(
-            x_range=(-1e6, 1e6, 0.2e6),
-            y_range=(-1e6, 1e6, 0.2e6),
-            z_range=(-1e6, 1e6, 0.2e6),
+            x_range=(-1, 1, 0.2),
+            y_range=(-1, 1, 0.2),
+            z_range=(-1, 1, 0.2),
 
         )
         self.play(Create(axes))
 
-        self.move_camera(phi = 75 * DEGREES, theta = 45 * DEGREES)
-        spheres = [self.create_product(axes, i, files[0].content[1].vecteur, 5e-2) for i in files[0].content[1].sub_products]
+        self.move_camera(phi = 75 * DEGREES, theta = 30 * DEGREES)
+        spheres = [self.create_product(axes, i, files[0].content[0].vecteur, 1e-6) for i in files[0].content[0].sub_products]
         spheres = list(zip(*spheres))
         starting_spheres = VGroup(spheres[0])
         ending_points = np.array(spheres[1])
-        animations = [starting_spheres[i].animate(run_time=1, rate_func=rate_functions.linear).move_to(ending_points[i]) for i in range(len(ending_points))]
-
-        in_neutron = self.create_in_neutron(files[0].content[1].vecteur, files[0].energy, 5e-2, axes)
-
-        si = files[0].content[0].reac[-1]
-        print(si)
-        silicium = Sphere(
-            center = axes.coords_to_point(files[0].content[1].vecteur)[0],
-            radius = parser.ATOMS[si]["radius"] * 1.5,
-            resolution = (8, 8),
-            stroke_width = np.array([0.1])
-        ).set_color(parser.ATOMS[si]["color"])
-        silicium.stroke_color = BLACK
-        self.play(Create(silicium))
-        group = VGroup([in_neutron])
-
-        neutranim = [group[0].animate(run_time=1, rate_func=rate_functions.linear).move_to(axes.coords_to_point(files[0].content[0].vecteur)[0])]
-        self.add(in_neutron)
-        print(axes.coords_to_point(files[0].content[1].vecteur)[0])
-
-
-        self.play(*neutranim)
-        self.remove(silicium, in_neutron)
         self.add(*starting_spheres)
-        self.play(*animations)
-
+        self.wait(0.2)
+        self.play(starting_spheres.animate.move_to(ending_points))
+        
 
         sphere1 = Sphere(
             center = (0.5,0.5,0.5),
             resolution=(16,16)
         )
 
+        self.interactive_embed()
         """
 
         self.renderer.camera.light_source.move_to((5,5,5)) # changes the source of the light
@@ -180,6 +145,7 @@ class Collision(ThreeDScene):
 
         self.move_camera(phi = 75 * DEGREES, theta = (30-180) * DEGREES)
         """
+        self.wait(3)
         self.interactive_embed()
 
 

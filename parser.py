@@ -10,7 +10,9 @@ np.set_printoptions(threshold=sys.maxsize)
 AMU = 931.5 # MeV/c**2
 
 ATOMS = {
+    "gamma" : {"mass" : 0, "color" : YELLOW, "radius" : 0.1},
     "e-" : {"mass" : 0.51099895069, "color" : GOLD_E, "radius" : 0.1},
+    "omega-" : {"mass" : 1672.45, "color" : GREY_B , "radius" : 0.1},
     "xi-" : {"mass" : 1314.86, "color" : ORANGE, "radius" : 0.1},
     "xi0" : {"mass" : 1321.71, "color" : ORANGE, "radius" : 0.1},
     "pi-" : {"mass" : 139.57018, "color" : YELLOW, "radius" : 0.1},
@@ -28,21 +30,29 @@ ATOMS = {
     "lambda" : {"mass" : 1115.683, "color" : LIGHT_BROWN, "radius" : 0.1},
     "neutron" : {"mass" : 939.565422, "color" : GREEN, "radius" : 0.2},
     "proton" : {"mass" : 938.272089, "color" : WHITE, "radius" : 0.2},
-    "deuteron" : {"mass" : 2.01410177812 * AMU, "color" : LIGHTER_GRAY, "radius" : 0.2},
-    "triton" : {"mass" : 3.0160492779 * AMU, "color" : LIGHT_GRAY, "radius" : 0.2},
-    "H4" : {"mass" : 4.02643 * AMU, "color" : GRAY_B, "radius" : 0.2},
+    "deuteron" : {"mass" : 2.01410177812 * AMU, "color" : WHITE, "radius" : 0.2},
+    "triton" : {"mass" : 3.0160492779 * AMU, "color" : WHITE, "radius" : 0.2},
+    "H4" : {"mass" : 4.02643 * AMU, "color" : GREY_B, "radius" : 0.2},
+    "H5" : {"mass" : 5.03531 * AMU, "color" : GREY_B, "radius" : 0.2},
+    "H6" : {"mass" : 6.04496 * AMU, "color" : GREY_B, "radius" : 0.2},
+    "H7" : {"mass" : 7.052750 * AMU, "color" : GREY_B, "radius" : 0.2},
     "alpha": {"mass" : 3.726379e3, "color" : BLUE_B, "radius" : 0.3},
     "He3" : {"mass" : 3.0160293201 * AMU, "color" : TEAL, "radius" : 0.3},
     "He4" : {"mass" : 4.00260325413 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He5" : {"mass" : 5.012057 * AMU, "color" : TEAL, "radius" : 0.3},
     "He6" : {"mass" : 6.0188891 * AMU, "color" : TEAL, "radius" : 0.3},
     "He7" : {"mass" : 7.028021 * AMU, "color" : TEAL, "radius" : 0.3},
     "He8" : {"mass" : 8.033922 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He9" : {"mass" : 9.043946 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He10" : {"mass" : 10.05281531 * AMU, "color" : TEAL, "radius" : 0.3},
     "Li4" : {"mass" : 4.02719 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li5" : {"mass" : 5.01254 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li6" : {"mass" : 6.0151228874 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li7" : {"mass" : 7.0160034366 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li8" : {"mass" : 8.02248736 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li9" : {"mass" : 9.0267895 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li10" : {"mass" : 10.035483 * AMU, "color" : YELLOW_E, "radius" : 0.3},
+    "Li11" : {"mass" : 11.0437236 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Be6" : {"mass" : 6.019726 * AMU, "color" : PURPLE, "radius" : 0.3},
     "Be7" : {"mass" : 7.01692983 * AMU, "color" : PURPLE, "radius" : 0.3},
     "Be8" : {"mass" : 8.00530510 * AMU, "color" : PURPLE, "radius" : 0.3},
@@ -50,17 +60,25 @@ ATOMS = {
     "Be10" : {"mass" : 10.0135338 * AMU, "color" : PURPLE, "radius" : 0.3},
     "Be11" : {"mass" : 11.021658 * AMU, "color" : PURPLE, "radius" : 0.3},
     "Be12" : {"mass" : 12.026921 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "Be13" : {"mass" : 13.036135 * AMU, "color" : PURPLE, "radius" : 0.3},
+    "B7" : {"mass" : 8.0246073 * AMU, "color" : MAROON_E, "radius" : 0.3},
     "B8" : {"mass" : 8.0246072 * AMU, "color" : MAROON_E, "radius" : 0.3},
     "B9" : {"mass" : 9.0133288 * AMU, "color" : MAROON_E, "radius" : 0.3},
     "B10" : {"mass" : 10.01293695 * AMU, "color" : MAROON_E, "radius" : 0.4},
     "B11" : {"mass" : 11.00930536 * AMU, "color" : MAROON_E, "radius" : 0.4},
     "B12" : {"mass" : 12.0143521 * AMU, "color" : MAROON_E, "radius" : 0.4},
     "B13" : {"mass" : 13.0177802 * AMU, "color" : MAROON_E, "radius" : 0.4},
+    "B14" : {"mass" : 14.025404 * AMU, "color" : MAROON_E, "radius" : 0.4},
+    "C8" : {"mass" : 8.037643 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C9" : {"mass" : 9.0310372 * AMU, "color" : BLACK, "radius" : 0.4},
     "C10" : {"mass" : 10.0168532 * AMU, "color" : BLACK, "radius" : 0.4},
     "C11" : {"mass" : 11.0114336 * AMU, "color" : BLACK, "radius" : 0.4},
     "C12" : {"mass" : 12 * AMU, "color" : BLACK, "radius" : 0.4},
-    "C13" : {"mass" : 13.00335483507 * AMU, "color" : DARKER_GRAY, "radius" : 0.4},
-    "C14" : {"mass" : 14.0032419884 * AMU, "color" : LOGO_BLACK, "radius" : 0.4},
+    "C13" : {"mass" : 13.00335483507 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C14" : {"mass" : 14.0032419884 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C15" : {"mass" : 15.0105993 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C16" : {"mass" : 16.014701 * AMU, "color" : BLACK, "radius" : 0.4},
+    "C17" : {"mass" : 17.022579 * AMU, "color" : BLACK, "radius" : 0.4},
     "N11" : {"mass" : 11.02609 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
     "N12" : {"mass" : 12.0186132 * AMU, "color" :   PURE_BLUE, "radius" : 0.4},
     "N13" : {"mass" : 13.00573861 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
@@ -68,6 +86,11 @@ ATOMS = {
     "N15" : {"mass" : 15.00010889888 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
     "N16" : {"mass" : 16.0061017 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
     "N17" : {"mass" : 17.008450 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N18" : {"mass" : 18.014078 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N19" : {"mass" : 19.017022 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "N20" : {"mass" : 20.023370 * AMU, "color" : PURE_BLUE, "radius" : 0.4},
+    "O12" : {"mass" : 12.034368 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O13" : {"mass" : 13.024815 * AMU, "color" : PURE_RED, "radius" : 0.4},
     "O14" : {"mass" : 19.003580 * AMU, "color" : PURE_RED, "radius" : 0.4},
     "O15" : {"mass" : 15.0030656 * AMU, "color" : PURE_RED, "radius" : 0.4},
     "O16" : {"mass" : 15.99491461957 * AMU, "color" : PURE_RED, "radius" : 0.4},
@@ -76,6 +99,8 @@ ATOMS = {
     "O19" : {"mass" : 19.003580 * AMU, "color" : PURE_RED, "radius" : 0.4},
     "O20" : {"mass" : 20.0040767 *  AMU, "color" : PURE_RED, "radius" : 0.4},
     "O21" : {"mass" : 21.008656 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O22" : {"mass" : 22.00997 * AMU, "color" : PURE_RED, "radius" : 0.4},
+    "O23" : {"mass" : 23.01570 * AMU, "color" : PURE_RED, "radius" : 0.4},
     "F15" : {"mass" : 15.01801 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
     "F16" : {"mass" : 16.011466 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
     "F17" : {"mass" : 17.00209524 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
@@ -84,13 +109,20 @@ ATOMS = {
     "F20" : {"mass" : 19.99998132 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
     "F21" : {"mass" : 20.9999490 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
     "F22" : {"mass" : 22.002999 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
-    "Ne18" : {"mass" : 18.0057082 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F23" : {"mass" : 23.003530 * AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "F24" : {"mass" : 24.008100  *AMU, "color" : ManimColor.from_hex("#AAAA30"), "radius" : 0.4},
+    "Ne16" : {"mass" : 16.025751 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne17" : {"mass" : 17.0177140 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne18" : {"mass" : 18.0057082 * AMU, "color" : MAROON, "radius" : 0.4},
     "Ne19" : {"mass" : 19.0018802 * AMU, "color" : MAROON, "radius" : 0.4},
     "Ne20" : {"mass" : 19.9924401762 * AMU, "color" : MAROON, "radius" : 0.4},
     "Ne21" : {"mass" : 20.993846685 * AMU, "color" : MAROON, "radius" : 0.4},
     "Ne22" : {"mass" : 21.991385114 * AMU, "color" : MAROON, "radius" : 0.4},
     "Ne23" : {"mass" : 22.99446690 * AMU, "color" : MAROON, "radius" : 0.4},
     "Ne24" : {"mass" : 23.9936108 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne25" : {"mass" : 24.997810 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Ne26" : {"mass" : 26.000516 * AMU, "color" : MAROON, "radius" : 0.4},
+    "Na20" : {"mass" : 20.007351 * AMU, "color" : LOGO_BLUE, "radius" : 0.4},
     "Na21" : {"mass" : 20.9976552 * AMU, "color" : LOGO_BLUE, "radius" : 0.4},
     "Na22" : {"mass" : 21.9944364 * AMU, "color" : LOGO_BLUE, "radius" : 0.4},
     "Na23" : {"mass" : 22.9897692820 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
@@ -98,6 +130,8 @@ ATOMS = {
     "Na25" : {"mass" : 24.9899540 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
     "Na26" : {"mass" : 25.992633 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
     "Na27" : {"mass" : 26.994077 * AMU, "color" : LOGO_BLUE, "radius": 0.5},
+    "Na28" : {"mass" : 27.998939 * AMU, "color" : LOGO_BLUE, "radius" : 0.5},
+    "Mg20" : {"mass" : 20.0187631 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
     "Mg21" : {"mass" : 21.011713 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
     "Mg22" : {"mass" : 21.9995738 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
     "Mg23" : {"mass" : 22.9941237 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
@@ -106,6 +140,9 @@ ATOMS = {
     "Mg26" : {"mass" : 25.982592968 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
     "Mg27" : {"mass" : 26.98434059 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
     "Mg28" : {"mass" : 27.9838768 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Mg29" : {"mass" : 28.9886072 * AMU, "color" : ManimColor.from_hex("#C036AC"), "radius" : 0.5},
+    "Al22" : {"mass" : 22.01942310 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Al23" : {"mass" : 23.00724435 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
     "Al24" : {"mass" : 23.99994760 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
     "Al25" : {"mass" : 24.990428308 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
     "Al26" : {"mass" : 25.98689169 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
@@ -113,13 +150,22 @@ ATOMS = {
     "Al28" : {"mass" : 27.981910009 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
     "Al29" : {"mass" : 28.98045316 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
     "Al30" : {"mass" : 29.9829692 * AMU, "color" : LOGO_GREEN, "radius" : 0.5},
+    "Si22" : {"mass" : 22.03611 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si23" : {"mass" : 23.02571 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si24" : {"mass" : 24.011535 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si25" : {"mass" : 25.004109 * AMU, "color" : PURPLE_A, "radius" : 0.5},
     "Si26" : {"mass" : 25.992330 * AMU, "color" : PURPLE_A, "radius" : 0.5},
-    "Si27" : {"mass" : 26.98670491 * AMU, "color" : PURPLE_B, "radius" : 0.5},
-    "Si28" : {"mass" : 27.97692653465 * AMU, "color" : PURPLE_C, "radius" : 0.5},
-    "Si29" : {"mass" : 28.97649466490 * AMU, "color" : PURPLE_D, "radius" : 0.5},
-    "Si30" : {"mass" : 29.973770136 * AMU, "color" : PURPLE_E, "radius" : 0.5},
+    "Si27" : {"mass" : 26.98670491 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si28" : {"mass" : 27.97692653465 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si29" : {"mass" : 28.97649466490 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si30" : {"mass" : 29.973770136 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "Si31" : {"mass" : 30.975363196 * AMU, "color" : PURPLE_A, "radius" : 0.5},
+    "P25" : {"mass" : 25.01178 * AMU, "color" : TEAL_E, "radius" : 0.5}, #?????? wrong mass
+    "P26" : {"mass" : 26.01178 * AMU, "color" : TEAL_E, "radius" : 0.5},
     "P27" : {"mass" : 26.999230 *AMU, "color" : TEAL_E, "radius" : 0.5},
     "P28" : {"mass" : 27.992315 * AMU, "color" : TEAL_E, "radius" : 0.5},
+    "P29" : {"mass" : 28.98180037 * AMU, "color" : TEAL_E, "radius" : 0.5},
+    "P30" : {"mass" : 29.978313490 * AMU, "color" : TEAL_E, "radius" : 0.5},
 }
 
 class Fichier:
@@ -182,7 +228,7 @@ class Fichier:
     
 
     def __galette(self, content):
-        return np.array([[i.vecteur.x, i.vecteur.y, i.vecteur.z] for i in content])
+        return np.array([[i.vecteur[0], i.vecteur[1], i.vecteur[2]] for i in content])
 
 
     def __nb_sec_by_type_of_sec_limited(self, content: list) -> dict:
@@ -264,16 +310,9 @@ class Sub_product:
         self.name: str = name
         self.energy: float = energy
         self.vecteur: np.ndarray = vec
-        if self.name != "gamma":
-            if "anti_" in self.name:
-                self.name = self.name.split("_")[1]
-            self.mass: float = ATOMS[self.name]["mass"]
-            self.color: ManimColor = ATOMS[self.name]["color"]
-            self.radius: float = ATOMS[self.name]["radius"]
-        else:
-            self.color: ManimColor = YELLOW_E
-            self.radius: float = 0.1
-            self.mass = 0
+        if "anti_" in self.name:
+            self.name = self.name.split("_")[1]
+        self.dic: dict = ATOMS[self.name] 
         self.norm: float = np.sqrt(vec[0]**2 + vec[1]**2 + vec[2]**2)
         self.vecteur /= self.norm
         self.norm: float = np.sqrt(vec[0]**2 + vec[1]**2 + vec[2]**2)
@@ -301,6 +340,7 @@ class Reaction:
     def __init__(self, vec: Vecteur, sub_products: list, eq_reac: list):
         # Attributs
         self.eq_reac: list[str] = eq_reac
+        self.reac = self.__get_reac()
         self.vecteur: Vecteur = vec
         self.sub_products: np.ndarray = np.array(sub_products)
         self.nb_sous_reactifs: int = len(self.sub_products)
@@ -361,7 +401,7 @@ def parser(file: str) -> tuple[np.ndarray, int, int]:
     for i in liste[1:]:
         v = [[a for a in j.split(" ") if a != ""] for j in i.split("\n") if j != ""]
         
-        in_vec = Vecteur(v[1][0], v[1][1], v[1][2])
+        in_vec = np.array([float(v[1][0]), float(v[1][1]), float(v[1][2])])
 
         eq_reac = v[0][2:]
         eq_reac = eq_reac[:-1]
