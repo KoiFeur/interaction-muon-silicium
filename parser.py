@@ -10,7 +10,7 @@ np.set_printoptions(threshold=sys.maxsize)
 AMU = 931.5 # MeV/c**2
 
 ATOMS = {
-    "gamma" : {"mass" : 0, "color" : YELLOW, "radius" : 0.1},
+    "gamma" : {"mass" : 0, "color" : ManimColor.from_hex("#FF00FF"), "radius" : 0.1},
     "e-" : {"mass" : 0.51099895069, "color" : GOLD_E, "radius" : 0.1},
     "omega-" : {"mass" : 1672.45, "color" : GREY_B , "radius" : 0.1},
     "xi-" : {"mass" : 1314.86, "color" : ORANGE, "radius" : 0.1},
@@ -226,10 +226,11 @@ class Fichier:
                     nb_sec[i.name] += 1
         self.nb_sec_sorted = dict(sorted(nb_sec.items(), key=lambda item:item[1]))
     
-
     def __galette(self, content):
         return np.array([[i.vecteur[0], i.vecteur[1], i.vecteur[2]] for i in content])
 
+    def get_reac(self) -> np.ndarray :
+        return parser(self.name)[0]
 
     def __nb_sec_by_type_of_sec_limited(self, content: list) -> dict:
         "Used to apply the limit on the dict nb_sec_sorted"
@@ -257,7 +258,6 @@ class Fichier:
         self.energy_limited = energy_limited
         del(limite, energy, energy_limited)
 
-    
     def __extremum_of_energy(self, content: list) -> list:
         "Used to create a list with all of the energies of the secondaries in the file"
         energy_limited = self.energy_limited
@@ -272,7 +272,6 @@ class Fichier:
         #attribut : 
         self.energy: int = energy
         self.name: str = name
-        self.content: np.ndarray = content[:30]
         self.nb_tot_secondaries: int = 0
         self.reactions_types: dict = {}
         self.nb_sec_sorted: dict = {}
@@ -292,6 +291,7 @@ class Fichier:
         self.__secondaries_by_kind(content)
         self.__nb_sec_by_type_of_sec(content)
         self.__nb_tot_sec(content)
+
 
 class Vecteur:
     def __str__(self):
@@ -337,8 +337,9 @@ class Reaction:
             self.reaction_type = "Absorption"
             return 0
 
-    def __init__(self, vec: Vecteur, sub_products: list, eq_reac: list):
+    def __init__(self, vec: Vecteur, sub_products: list, eq_reac: list, reaction_str: str):
         # Attributs
+        self.reaction_str: str = reaction_str
         self.eq_reac: list[str] = eq_reac
         self.reac = self.__get_reac()
         self.vecteur: Vecteur = vec
@@ -406,7 +407,7 @@ def parser(file: str) -> tuple[np.ndarray, int, int]:
         eq_reac = v[0][2:]
         eq_reac = eq_reac[:-1]
         sub_products = [Sub_product(i[0], float(i[1]), np.array([float(i[2]), float(i[3]), float(i[4])])) for i in v[2:]]
-        reactions.append(Reaction(in_vec, sub_products, eq_reac))
+        reactions.append(Reaction(in_vec, sub_products, eq_reac, i))
 
     del(liste)
  
