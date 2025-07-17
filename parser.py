@@ -37,14 +37,14 @@ ATOMS = {
     "H6" : {"mass" : 6.04496 * AMU, "color" : GREY_B, "radius" : 0.2},
     "H7" : {"mass" : 7.052750 * AMU, "color" : GREY_B, "radius" : 0.2},
     "alpha": {"mass" : 3.726379e3, "color" : BLUE_B, "radius" : 0.3},
-    "He3" : {"mass" : 3.0160293201 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He4" : {"mass" : 4.00260325413 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He5" : {"mass" : 5.012057 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He6" : {"mass" : 6.0188891 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He7" : {"mass" : 7.028021 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He8" : {"mass" : 8.033922 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He9" : {"mass" : 9.043946 * AMU, "color" : TEAL, "radius" : 0.3},
-    "He10" : {"mass" : 10.05281531 * AMU, "color" : TEAL, "radius" : 0.3},
+    "He3" : {"mass" : 3.0160293201 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He4" : {"mass" : 4.00260325413 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He5" : {"mass" : 5.012057 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He6" : {"mass" : 6.0188891 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He7" : {"mass" : 7.028021 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He8" : {"mass" : 8.033922 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He9" : {"mass" : 9.043946 * AMU, "color" : BLUE_B, "radius" : 0.3},
+    "He10" : {"mass" : 10.05281531 * AMU, "color" : BLUE_B, "radius" : 0.3},
     "Li4" : {"mass" : 4.02719 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li5" : {"mass" : 5.01254 * AMU, "color" : YELLOW_E, "radius" : 0.3},
     "Li6" : {"mass" : 6.0151228874 * AMU, "color" : YELLOW_E, "radius" : 0.3},
@@ -230,7 +230,9 @@ class Fichier:
         return np.array([[i.vecteur[0], i.vecteur[1], i.vecteur[2]] for i in content])
 
     def get_reac(self) -> np.ndarray :
-        return parser(self.name)[0]
+        content, energy, _ = parser(self.name)
+        self.ini(self.name, content, energy)
+        return content
 
     def __nb_sec_by_type_of_sec_limited(self, content: list) -> dict:
         "Used to apply the limit on the dict nb_sec_sorted"
@@ -268,7 +270,10 @@ class Fichier:
         self.en_minimum = min(i for i in all_the_energy)
         self.en_maximum = max(i for i in all_the_energy)
     
-    def __init__(self, name, content: np.ndarray, energy):
+    def __init__(self, name):
+        self.name = name
+
+    def ini(self, name, content: np.ndarray, energy):
         #attribut : 
         self.energy: int = energy
         self.name: str = name
@@ -339,7 +344,7 @@ class Reaction:
 
     def __init__(self, vec: Vecteur, sub_products: list, eq_reac: list, reaction_str: str):
         # Attributs
-        self.reaction_str: str = reaction_str
+        self.text: str = reaction_str
         self.eq_reac: list[str] = eq_reac
         self.reac = self.__get_reac()
         self.vecteur: Vecteur = vec
@@ -352,14 +357,16 @@ class Reaction:
 
 def open_multiple_files(liste: list) -> list:
     files = []
+    energy = []
     for i in tqdm(liste):
-        reaction, energy, return_code = parser(i)
-        if return_code != 0:
-            print(f"{bcolors.FAIL} File {i} didn't process correctly {bcolors.ENDC}")
-        else:
-            files.append(Fichier(i, reaction, energy))
-            del(reaction)
-    files = [(int(i.energy), i) for i in files]
+        #reaction, energy, return_code = parser(i)
+        files.append(Fichier(i))
+        name = i.split("_")[2]
+        name = name.split("eV")[0]
+        energy.append(int(name.split("M")[0] if "M" in name else int(name.split("G")[0]) * 1e3))
+        print(name, "M" in name)
+
+    files = [(int(energy[i]), v) for i, v in enumerate(files)]
     files = np.array(sorted(files)).T
     return files[1]
 
@@ -381,7 +388,7 @@ def parser(file: str) -> tuple[np.ndarray, int, int]:
         print(f"{bcolors.FAIL}Can't open file{bcolors.ENDC}")
         return (np.array(liste),0, -1)
 
-    for line in data: #read file
+    for line in tqdm(data): #read file
         line += "\n" #weird but the progress bar
         if "[" in line:
             line = line.split("[")[0] + line.split("]")[1]
@@ -399,7 +406,7 @@ def parser(file: str) -> tuple[np.ndarray, int, int]:
 
     energy = liste[1].split("\n")[1].split(" ")[6]
 
-    for i in liste[1:]:
+    for i in tqdm(liste[1:]):
         v = [[a for a in j.split(" ") if a != ""] for j in i.split("\n") if j != ""]
         
         in_vec = np.array([float(v[1][0]), float(v[1][1]), float(v[1][2])])

@@ -1,5 +1,6 @@
-import os
-import sys
+import os, sys, termios, tty, time
+
+from manim.scene.three_d_scene import OpenGLCamera
 sys.path.append("/run/media/n/feur/feur/biboubiboup/lepython/interaction_muon_silicium/")
 import parser
 import matplotlib.pyplot as plt
@@ -8,7 +9,6 @@ from manim import *
 from manim.opengl import *
 from tqdm import tqdm 
 np.set_printoptions(threshold=sys.maxsize)
-from pynput import keyboard
 # Collect events until released
 
 c = 299792458
@@ -40,13 +40,6 @@ def ploting_hist(names, titles, content, dims, fig_dims, lims = None, colors = N
 
 
 class Collision(ThreeDScene):
-    def spheres(self, u, v, r, starting_point):
-        return np.array([
-            starting_point[0] + r * np.cos(u) * np.sin(v),
-            starting_point[0] + r * np.sin(u) * np.sin(v),
-            starting_point[0] + r * np.cos(u)
-        ]),
-
     def create_product(self, axes, sub_product: parser.Sub_product, starting_point: np.ndarray, duration_time: float):
         r = parser.ATOMS[sub_product.name]["radius"] * 1.5
         v = np.sqrt(1 - (1/((sub_product.energy/parser.ATOMS[sub_product.name]["mass"]) + 1))) * c
@@ -86,7 +79,7 @@ class Collision(ThreeDScene):
         neutron.stroke_color = BLACK
         return neutron
 
-    def play_collision(self, file, axes, reaction, animation_duration = 1, duration_time = 1e-8):
+    def play_collision(self, file, axes, reaction, animation_duration = 1, duration_time = 1e-8, neutron_duration=1e-8):
         self.move_camera(theta=0, phi=0)
         spheres = []
         gammas = []
@@ -101,7 +94,7 @@ class Collision(ThreeDScene):
         animations = [starting_spheres[i].animate(run_time=animation_duration, rate_func=rate_functions.linear).move_to(ending_points[i]) for i in range(len(ending_points))]
         gammas = VGroup(gammas)#[Create(i) for i in gammas]
 
-        in_neutron = self.create_in_neutron(reaction.vecteur, file.energy, 1e-8, axes)
+        in_neutron = self.create_in_neutron(reaction.vecteur, file.energy, neutron_duration, axes)
 
         si = reaction.reac[-1]
         silicium = Sphere(
@@ -116,21 +109,39 @@ class Collision(ThreeDScene):
 
         self.play(Create(silicium))
         self.move_camera(phi = 80 * DEGREES, theta = -90 * DEGREES)
+        self.wait(3)
+        self.add_fixed_in_frame_mobjects(Text(str(file.energy) + "MeV").to_corner(UP + LEFT))
         self.add(in_neutron)
         self.play(*neutranim)
         self.remove(silicium, in_neutron)
         self.add(*starting_spheres, *gammas)
         self.play(*animations)
+        self.move_camera(phi = 80 * DEGREES, theta = 0 * DEGREES, run_time=3, rate_func=rate_functions.linear)
+        self.move_camera(phi = 80 * DEGREES, theta = 90 * DEGREES, run_time=3, rate_func=rate_functions.linear)
+        self.move_camera(phi = 80 * DEGREES, theta = 180 * DEGREES, run_time=3, rate_func=rate_functions.linear)
+        self.move_camera(phi = 80 * DEGREES, theta = 270 * DEGREES, run_time=3, rate_func=rate_functions.linear)
 
-    def animation_0(self):
-        self.play(FadeOut(VGroup(*self.mobjects)))
+    def title(self):
+        try:
+            self.play(*[FadeOut(mob)for mob in self.mobjects])
+            self.remove(*[mob for mob in self.mobjects])
+        except ValueError:
+            pass
+        #self.move_camera(phi=0,theta=0)
+        text = Text("Interaction neutron-Silicium")
+        self.play(Write(text))
+
+    def first_reaction_text(self, reaction_num=165):
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+        reaction = self.files[0].get_reac()[reaction_num]
+        text = Text(*[reaction.reaction_str])
+        Write(text)
+
+    def first_collision(self, reaction_num=165):
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
         self.move_camera(phi=0,theta=0)
-        text = Text("interaction_muon_silicium")
-        self.play(Create(text))
-
-    def animation_1(self):
-        self.play(FadeOut(VGroup(*self.mobjects)))
-        reaction = self.files[0].get_reac()
+        reaction = self.files[0].get_reac()[reaction_num]
+        print(reaction.text)
         axes = ThreeDAxes(
             x_range=(-1, 1, 0.2),
             y_range=(-1, 1, 0.2),
@@ -138,7 +149,37 @@ class Collision(ThreeDScene):
 
         )
         self.play(Create(axes))
-        self.play_collision(self.files,axes,reaction)
+        self.play_collision(self.files[0],axes,reaction, animation_duration=5, duration_time=5e-6, neutron_duration=1e-7)
+
+    def third_collision(self, reaction_num=19):
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+        self.move_camera(phi=0,theta=0)
+        reaction = self.files[31].get_reac()[reaction_num]
+        print(reaction.text)
+        print(self.files[31])
+        axes = ThreeDAxes(
+            x_range=(-1, 1, 0.2),
+            y_range=(-1, 1, 0.2),
+            z_range=(-1, 1, 0.2),
+
+        )
+        self.play(Create(axes))
+        self.play_collision(self.files[31],axes,reaction, animation_duration=5, duration_time=5e-8, neutron_duration=3e-8)
+
+    def second_collision(self, reaction_num=17, file=12):
+        self.play(*[FadeOut(mob)for mob in self.mobjects])
+        self.move_camera(phi=0,theta=0)
+        reaction = self.files[file].get_reac()[reaction_num]
+        print(self.files[file])
+        print(reaction.text)
+        axes = ThreeDAxes(
+            x_range=(-1, 1, 0.2),
+            y_range=(-1, 1, 0.2),
+            z_range=(-1, 1, 0.2),
+
+        )
+        self.play(Create(axes))
+        self.play_collision(self.files[file],axes,reaction, animation_duration=5, duration_time=5e-8, neutron_duration=3e-8)
 
     def on_press(self, key):
         try:
@@ -146,102 +187,76 @@ class Collision(ThreeDScene):
 
         except AttributeError:
             print('special key {0} pressed'.format(key))
-            if key == key.page_up:
+            if key == "page_up":
                 if not(self.animation_played):
                     print(self.playing_animation)
                     if self.playing_animation > 0:
                         self.playing_animation -= 1
-                        eval(f"self.animation_{self.playing_animation}()")
-            if key == key.page_down:
+                        self.home_made_animations[self.playing_animation]()
+            if key == "page_down":
                 if not(self.animation_played):
                     self.playing_animation += 1
                     print(self.playing_animation)
-                    try:
-                        print(f"self.animation_{self.playing_animation}()")
-                        eval(f"self.animation_{self.playing_animation}()")
-                    except Exception as e:
-                        print(e)
-                        return False
+                    print(self.home_made_animations)
+                    self.home_made_animations[self.playing_animation]()
         self.animation_played = True
 
-
-    def on_release(self, key):
-        print('{0} released'.format(key))
+    def on_release(self):
+        print("released")
         self.animation_played = False
-        if key == keyboard.Key.esc:
-            # Stop listener
-            return False
 
     def construct(self):
         liste = os.listdir("Secondaries_zips")
-        liste = ["Secondaries_zips/" + i for i in liste if "txt" in i][27:29]
+        liste = ["Secondaries_zips/" + i for i in liste if "txt" in i]
         print(liste)
 
         self.files = parser.open_multiple_files(liste)
 
         self.playing_animation = 0
         self.animation_played = False
-        self.animation_0()
 
-        with keyboard.Listener(on_press=self.on_press, on_release=self.on_release) as listener:
-            listener.join()
-
-
-        
-
-        
-        
-
-        sphere1 = Sphere(
-            center = (0.5,0.5,0.5),
-            resolution=(16,16)
-        )
-
+        self.home_made_animations = [self.title, self.first_collision, self.second_collision, self.third_collision]
+        self.home_made_animations[0]()
+        self.home_made_animations[1]()
+        self.home_made_animations[2]()
+        self.home_made_animations[3]()
         """
+        page_up = [27, 91, 53, 126]
+        page_down = [27, 91, 54, 126]
+        sequence_page_up = 0
+        sequence_page_down = 0
+        while True:
+            instant = time.time()
+            fd = sys.stdin.fileno()
+            old_settings = termios.tcgetattr(fd)
+            try:
+                tty.setraw(sys.stdin.fileno())
+                input = sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+                print(time.time() - instant)
+                if time.time() - instant > 1:
+                    self.on_release()
+                    instant = time.time()
+                print(type(ord(input)))
+                print(ord(input))
+                if ord(input) == 3:
+                    quit()
 
-        self.renderer.camera.light_source.move_to((5,5,5)) # changes the source of the light
-        self.play(Create(sphere1))
+                if ord(input) == page_up[sequence_page_up]:
+                    sequence_page_up += 1
+                else:
+                    sequence_page_up = 0
 
-        text = Text("").to_corner(UL)
+                if ord(input) == page_down[sequence_page_down]:
+                    sequence_page_down += 1
+                else:
+                    sequence_page_down = 0
+                if sequence_page_down == 4:
+                    self.on_press("page_down")
+                    sequence_page_down = 0
 
-        self.add_fixed_in_frame_mobjects(text)
-
-        text.text = "Silicium"
-
-        self.play(Create(text))
-
-
-
-        
-        point = axes.coords_to_point(files[0].galette[0][0], files[0].galette[0][1], files[0].galette[0][2])
-
-        
-        self.wait(3)
-        dot = Sphere(
-            center=point,
-            radius=0.1,
-            resolution=(8,8)
-        )
-
-
-        self.play(TransformMatchingShapes(sphere1, dot), Create(axes))     
-
-        
-        sphere_group = VGroup([Sphere(
-            center=axes.coords_to_point(i[0], i[1], i[2]),
-            radius=0.1, 
-            color = BLUE,
-            resolution=(4,4)
-        ).set_color(BLUE) for i in tqdm(files[0].galette[:30])])
-        self.play(Create(sphere_group))
-        self.remove(sphere1, dot)
-
-
-        self.move_camera(phi = 75 * DEGREES, theta = (30-180) * DEGREES)
-        """
-        self.interactive_embed()
-
-
-
-
-
+                if sequence_page_up == 4:
+                    self.on_press("page_up")
+                    sequence_page_up = 0
+            """
